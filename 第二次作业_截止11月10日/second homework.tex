@@ -1,0 +1,505 @@
+ 
+
+%请使用xelatex编译
+\documentclass[11pt,addpoints,answers]{exam}
+
+ 
+\input{header}
+
+
+\newcommand{\hwnum}{2}
+\newcommand{\duedate}{11月10日} % changing this does  e :)
+\newcommand{\studentname}{}
+
+% END OF SUPPLIED VARIABLES
+
+\hwheader                       % execute homework commands
+
+\begin{document}
+
+\pagestyle{head}                % put header on every page
+\begin{itemize}
+	\item 请将PDF文件发送至邮箱：complexity\_buaa@163.com
+	\item 文件命名规则是``学号-姓名-第二次作业.pdf"
+	\item 答案请用\LaTeX，打分基于认真性、正确性和描述的清晰性
+	\item 务必独立自主解题
+	\item 作业截止时间为 \textbf{\duedate}.
+\end{itemize}
+ 
+
+ 
+
+\begin{questions}
+    \question P97页, 2.2题
+    \begin{parts}
+	\part 利用语言$A=\{a^mb^nc^n|m,n\ge 0\}$和$B=\{a^nb^nc^m|m,n\ge 0\}$以及例2.20，证明上下文无关语言类在交运算下不封闭
+
+
+
+	\begin{solution}
+		由题：语言A和语言B是上下文无关语言，\( A \cap B = \{a^n b^n c^n \mid n \geq 0\} \) 不是上下文无关文法。故上下文无关语言类在交运算下不封闭。
+	\end{solution}
+    \part 利用(a)和德·摩根律(定理0.10)，证明上下文无关语言类在补运算下不封闭。
+    \begin{solution}
+ 	由德·摩根律可知：\( A \cap B = (A^C \cup B^C)^C \)。假设上下文无关语言类在补运算下封闭，则由 CFL 在并运算下封闭和上式可知：CFL 在交运算下封闭，这与 (a) 中的结论矛盾。
+    综上可知：上下文无关语言类在补运算下不封闭。
+    \end{solution} 
+    \end{parts}
+    
+    \question P97页, 2.4题设字母表 $\Sigma$ 是 $\{0,1\}$,给出产生下述语言的上下文无关文法.
+    \begin{parts}
+   
+    \part $\{w|w\text{以相同符号开始和结束}\}$
+    \begin{solution}
+      令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+    \[
+    V = \{S_0, A\}, \quad \Sigma = \{1, 0\}, \quad R = \{S_0 \rightarrow 0A0 \mid 1A1,\ A \rightarrow 0A \mid 1A \mid \varepsilon\}, \quad S = S_0
+    \]
+    \end{solution}
+
+
+
+   
+    \part $\{w|w\text{长度为奇数且正中间的符号是0}\}$
+    \begin{solution}
+      令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+      \[
+    V = \{S_0\}, \quad \Sigma = \{1, 0\}, \quad R = \{S_0 \rightarrow 0S_00 \mid 1S_01 \mid 1S_00 \mid 0S_01 \mid 0\}, \quad S = S_0
+    \]
+    \end{solution}
+
+
+    
+    \part $\{w|w=w^R\text{}$即$w$是一个回文$\}$    
+    \begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+    \[
+    V = \{S_0, A\}, \quad \Sigma = \{1, 0\}, \quad R = \{S_0 \rightarrow 0S_00 \mid 1S_01 \mid A,\ A \rightarrow 0 \mid 1 \mid \varepsilon\}, \quad S = S_0
+    \]
+    \end{solution}
+
+    \end{parts}
+ 
+    \question P97页, 2.6题, 给出产生下述语言的上下文无关文法
+    \begin{parts}
+	\part 字母表 $\{a,b\}$ 上 $a$ 多于 $b$ 的所有字符串组成的集合。
+	\begin{solution}
+		  令 CFG \(G = (V, \Sigma, R, S)\) 能识别题设语言，则 G 的构造如下：
+    \[
+    V = \{S_0\}, \quad \Sigma = \{a, b\}, \quad R = \{S_0 \rightarrow aS_0b \mid bS_0a \mid S_0a \mid aS_0 \mid a\}, \quad S = S_0
+    \]
+	\end{solution}
+
+	\part $\{a^nb^n|n\ge0\}$的补集
+	\begin{solution}
+		  令 CFG \(G = (V, \Sigma, R, S)\) 能识别题设语言，则 G 的构造如下：
+    \[
+    V = \{S_0, A, B\}, \quad \Sigma = \{a, b\}
+    \]
+    \[
+    \quad R = \{S_0 \rightarrow aS_0b \mid bA \mid Ba,\ A \rightarrow bA \mid aA \mid \varepsilon,\ B \rightarrow bB \mid aB \mid \varepsilon\}, \quad S = S_0
+    \]
+	\end{solution}
+
+
+    
+	\part $\{\omega \# x|\omega ,x\in\{0,1\}^*\text{且}{\omega}^{\mathcal{R}}\text{是}x\text{的子串}\}$
+	\begin{solution}
+	  令 CFG \(G = (V, \Sigma, R, S)\) 能识别题设语言，则 G 的构造如下：
+    \[
+    V = \{S_0, A, B\}, \quad \Sigma = \{0, 1, \#\}, 
+    \]
+    \[
+    \quad R = \{S_0 \rightarrow AB,\ A \rightarrow 0A0 \mid 1A1 \mid \#B,\ B \rightarrow 0B \mid 1B \mid \varepsilon\}, \quad S = S_0
+    \]
+	\end{solution}
+	
+    
+    
+    \part $\{x_1 \# x_2 \#... \#x_k |\text{每一个}x_i\in\{a,b\}^*,\text{且存在}i\text{和}j\text{使得}x_i=x_j^\mathcal{R}\}$
+	\begin{solution}
+	  令 CFG \(G = (V, \Sigma, R, S)\) 能识别题设语言，则 G 的构造如下：
+    \[
+    V = \{S_0, A, B, C\}, \quad \Sigma = \{a, b, \#\}, 
+    \]
+    \[
+    R = \{S_0 \rightarrow B\#A\#C \mid A\#B \mid B\#A \mid A,\ A \rightarrow aAa \mid bAb \mid \#B\#|\#,\ B \rightarrow bB \mid aB | b | a\}, 
+    \]
+    \[
+    S = S_0
+    \]
+    \end{solution}
+    \end{parts}
+
+
+
+    \question P97页, 2.9 给出产生语言$ A=\{a^ib^jc^k|i,j,k\geq 0 \text{且}i=j\text{或}j=k\}$的上下文无关文法。你给出的文法是歧义的吗？为什么？
+
+    \begin{solution}
+  令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+V = \{S_0, A, B, C, D\}, \quad \Sigma = \{a, b, c\}, 
+\]
+\[
+R = \{S_0 \rightarrow AB \mid CD,\ A \rightarrow aAb \mid \varepsilon,\ B \rightarrow cB \mid \varepsilon,\ C \rightarrow aC \mid \varepsilon,\ D \rightarrow bDc \mid \varepsilon\}, \quad S = S_0
+\]
+则显然对于字符串 \( abc \)，其派生方式有 2 种：
+\[
+S_0 \rightarrow AB \rightarrow aAbB \rightarrow abB \rightarrow abc, \quad S_0 \rightarrow CD \rightarrow CbDc \rightarrow abDc \rightarrow abc
+\]
+综上，该上下文无关文法是歧义的。
+    \end{solution}  
+
+
+
+    
+    \question P98页, 2.14题, 
+	用定理 2.6 中给定的过程，把下述 CFG 转换成等价的乔姆斯基范式文法。
+    \begin{equation*}
+    \begin{array}{l}A \rightarrow B A B|B| \varepsilon \\\left.B \rightarrow 00\right|{\varepsilon}\end{array}
+    \end{equation*}
+	\begin{solution}
+ \( G = (\{S, A, A_1, B, C\}, \{0\}, R, S) \)，其中 \( R \)：
+\[
+\begin{aligned}
+&S \rightarrow BA_1 \mid AB \mid BA \mid BB \mid CC \mid \varepsilon \\
+&A \rightarrow BA_1 \mid AB \mid BA \mid BB \mid CC \\
+&A_1 \rightarrow AB \\
+&B \rightarrow CC \\
+&C \rightarrow 0
+\end{aligned}
+\]
+	\end{solution} 
+
+
+
+
+\question P98页, 2.15题, 
+	给出一个反例证明下述构造不能证明上下文无关语言类在星号运算下封闭。 设CFL $A$由CFG $G=(V,\Sigma ,R,S)$产生，将$G$增加一条新规则$S\to SS$并称其为$G^{\prime}$，这个语法可产生语言$A^{*}$。
+
+	\begin{solution}
+令 CFG A \( G = (\{S_0\}, \{1\}, R, S) \)
+\[
+R=\{S_0 \rightarrow 1\},
+S=S_0
+\]
+加入新规则后：
+CFG B \( G = (\{S_0\}, \{1\}, R, S) \)
+\[
+R=\{S_0\rightarrow S_0S_0, \space S_0 \rightarrow 1\},
+S=S_0
+\]
+显然 $\varepsilon \in A^{*}$ 且 $\varepsilon \notin A^{*}$
+
+
+% 设规则 \( R \) 中没有 \( S \rightarrow \varepsilon \)，则：由星号运算已知 \( \varepsilon \in A^* \)，显然有上述规则，只存在转化 \( S \rightarrow S^k, k \geq 1, \varepsilon \notin L(G') \)。综上可知：下述构造不能证明上下文无关语言类在星号运算下封闭。
+	\end{solution} 
+
+
+
+
+    \question P99页, 2.30题, 
+    \begin{parts}
+    \part 设 $C$ 是上下文无关语言， $R$是正则语言。 证明语言 $C\cap R$是上下文无关的。
+	\begin{solution}
+令 PDA \( M = (Q_1, \Sigma_1, \Gamma_1, \delta_1, q_{01}, F_1) \) 是识别 C 的下推自动机，DFA \( N = (Q_2, \Sigma_2, \delta_2, q_{02}, F_2) \) 识别 R，构造 PDA \( M' = (Q, \Gamma, \Sigma, \delta, q, F) \)：
+    \[
+    Q = Q_1 \times Q_2, \quad \Gamma = \Gamma_1, \quad \Sigma = \Sigma_1 \cap \Sigma_2
+    \]
+    \(\delta\) 表示为 \(\delta((q_1, q_2), a, s) = ((q_1', q_2'), s')\)，其中 \((q_1, q_2) \in Q, a \in \Sigma, s \in \Gamma, \delta_1(q_1, a) = q_1', \delta_2(q_2, a) = q_2'\)。
+    \[
+    q = (q_{01}, q_{02}), \quad F = F_1 \times F_2
+    \]
+    \(M'\) 能够识别 \(C \cap R\)。
+	\end{solution} 
+
+
+    
+    \part 利用（a）证明语言$A=\{\omega| \omega\in\{a,b,c\}^{*},\text{且含有数目相同的a,b和c}\}$不是上下文无关的。
+
+% Todo 例2.20是啥？
+    \begin{solution}
+令正则语言 \(B = \{a^i b^j c^k \mid i, j, k \geq 0\}\)，则 \(C = A \cap B = \{a^i b^j c^k \mid i, j, k \geq 0, i = j = k\}\)。假设 A 是上下文无关文法，则由 (a) 可知：C 也是 CFL，这与例 2.20 中\(\{a^i b^j c^k \mid i, j, k \geq 0, i = j = k\}\)不是上下文无关文法的结论矛盾。综上可知：A 不是上下文无关的。
+	\end{solution} 
+    \end{parts}
+
+
+
+
+    \question P99页, 2.32题, 
+
+	设$A/B=\{\omega |\omega x\in A,\text{且}x\in B\}$，证明如果$A$是上下文无关语言且$B$是正则语言，则$A/B$是上下文无关语言。
+	\begin{solution}
+由于$B$是正则语言，存在DFA $M_B$接受$B$。由于$A$是上下文无关语言，存在PDA $P_A$接受$A$。
+
+我们要构造一个新的PDA $P$来接受$A/B$。对于输入串$\omega$，$P$模拟$P_A$读取$\omega$，然后\emph{非确定性地猜测}一个$x\in B$，并同时验证$\omega x$是否被$P_A$接受且$x$被$M_B$接受。
+
+设：
+\begin{itemize}
+    \item $M_B = (Q_B, \Sigma, \delta_B, q_{0B}, F_B)$ 是接受$B$的DFA
+    \item $P_A = (Q_A, \Sigma, \Gamma, \delta_A, q_{0A}, Z_0, F_A)$ 是接受$A$的PDA
+\end{itemize}
+
+构造PDA $P = (Q, \Sigma, \Gamma, \delta, q_0, Z_0, F)$如下：
+\begin{itemize}
+    \item $Q = Q_A \times Q_B$
+    \item $q_0 = (q_{0A}, q_{0B})$
+    \item 栈字母表$\Gamma$与$P_A$相同
+    \item 初始栈符号$Z_0$与$P_A$相同
+    \item $F = F_A \times F_B$（接受状态集）
+\end{itemize}
+
+转移函数$\delta$定义如下：
+
+1）读取真实输入符号：对于每个$a \in \Sigma$，$(p_A, p_B) \in Q$，$X \in \Gamma$，如果$\delta_A(p_A, a, X) \rightarrow (q_A, \gamma)$，则
+\[
+\delta\big( (p_A, p_B), a, X \big) \rightarrow \big( (q_A, p_B), \gamma \big).
+\]
+这里$M_B$的状态保持不变，因为尚未开始猜测$x$部分。
+
+2）猜测$x$的符号
+对于每个$b \in \Sigma$，$(p_A, p_B) \in Q$，$X \in \Gamma$，如果$\delta_B(p_B, b) \rightarrow q_B$且$\delta_A(p_A, b, X) \rightarrow (q_A, \gamma)$，则
+\[
+\delta\big( (p_A, p_B), \varepsilon, X \big) \rightarrow \big( (q_A, q_B), \gamma \big).
+\]
+这个$\varepsilon$-转移模拟了读取猜测字符串$x$中的符号$b$，不消耗真实输入。
+
+	\end{solution} 
+
+
+
+
+
+    \question P99页, 2.34题, 
+	设$C=\{x\# y|x,y\in\{0,1\}^{*},\text{且}x\neq y\}$，证明 $C$ 是上下文无关语言。
+    \begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+V = \{S, A, B\}, \quad \Sigma = \{0, 1, \#\}
+\]
+\[
+R = \{S \rightarrow X0Z \mid Y1Z,\ X \rightarrow 0X0 \mid 1X1 \mid 0X1 \mid 1X0 \mid 1Z\#,
+\]
+\[
+\ Y \rightarrow 0Y0 \mid 1Y1 \mid 0Y1 \mid 1Y0 \mid 0Z\#,\ Z \rightarrow 0Z \mid 1Z \mid \varepsilon,
+\]
+\[
+S \rightarrow A, \space A \rightarrow 0A0\mid 0A1\mid 1A0\mid 1A1\mid \#Z_0\mid Z_0\#, \space Z_0 \rightarrow 0Z \mid 1Z \mid 0 \mid 1 \}
+\]
+由构造可知：使用 \( S \rightarrow X0Z \mid Y1Z \)生成，则可转化为 \(\{w h z_1 \# w' k z_2 \mid h,k \in \{0,1\}^*, h \neq k, |w| = |w'|, |z_1| \geq 0, |z_2| \geq 0\}\)，由于 \( h \)、\( k \) 在 x 和 y 中从左往右对应位置相同且两者不相等，故 x 与 y 不相同，可以识别 x 与 y 中存在至少一对不同字符的字符串。但是此生成方法无法识别如 a\#ab, ab\#a这样的字符串。
+
+如果使用\(S \rightarrow A\)生成，则\#前后字符串长度不同。
+
+综上所述：CFG \( G \) 能识别题设语言，故题设语言为上下文无关语言。
+	\end{solution} 
+
+
+
+    
+    \question P99页, 2.35题, 
+	设$D=\{x y|x,y\in\{0,1\}^{*},\text{且}|x|= |y|\text{但}x\neq y\}$，证明 $D$ 是上下文无关语言。
+    \begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+V = \{S, A, B\}, \quad \Sigma = \{0, 1\}, \]
+\[
+R = \{S \rightarrow AB \mid BA,\ A \rightarrow 0 \mid 0A0 \mid 1A1 \mid 0A1 \mid 1A0,\ B \rightarrow 1 \mid 0B0 \mid 1B1 \mid 0B1 \mid 1B0\}
+\]
+由构造可知：识别的语言 \( L(G) = \{w h u v k v \mid h,k \in \{0,1\} \text{ 且 } w,v \in \{0,1\}^* \text{ 且 } h \neq k \text{ 且 } |w| = i, |v| = j\} \)。
+
+易知 \( |x| = |y| = i + j + 1, i,j \geq 0 \) 且 h 位于 x 的第 i + 1 位且 k 也位于 y 的第 i + 1 位，又因为 \( h \neq k \)，故 \( x \neq y \)，即满足题设条件。
+	\end{solution} 
+
+
+
+
+
+    \question P99页, 2.38题, 
+	设 $G$ 是 一 个 乔 姆 斯 基 范 式 CFG，证 明： 对 于 任 一 长 度 为 $n(n \geq 1)$ 的 字 符 串 $\omega\in L(G)$， 通过CFG $G$ 将其派生出来恰好需要 $2n-1$ 步。
+    \begin{solution}
+如果在乔姆斯基范式 CFG 中的转换规则 \( A \rightarrow BC \)，每一次转化都增加一个变元，则由 S 派生到长度为 n 的变元串 \( W_1W_2 \dots W_n \) 需要 \( n - 1 \) 步。对于 \( S \rightarrow W_1W_2 \dots W_n \)，其中每个变元 \( W_i \) 都有一步派生出一个终结符 \( w_i \)，即需要 n 步来转化变元。因此，对于任一长度为 \( n(n \geq 1) \) 的字符串 \( w \in L(G) \)，通过 CFG \( G \) 将其派生出来恰好需要 \( 2n - 1 \) 步。
+	\end{solution} 
+
+
+
+    
+	\question P99页, 2.42题。
+	使用泵引理证明下述语言不是上下文无关的。
+	\begin{parts}
+	\part 2.42题(a):$\left\{0^n1^n0^n1^n|n\geq 0\right\} $
+	\begin{solution}
+		假设题设语言 A 是 CFL，令 p 是泵长度，\( s = 0^p1^p0^p1^p \)，s 被分成五段 \( s = uvxyz \)。根据泵引理，有 \( |vxy| \leq p \)，则 vxy 至多包含两段 0 和 1 的内容，不包含另外两段 0 和 1 的内容：则当 \( i = 0 \) 时，被vxy包含的两段 0 或 1 个数小于另外两段，不属于 A。
+    与 CFL 的泵引理矛盾。综上可知：A 不是 CFL。
+	\end{solution}
+
+
+        
+	\part 2.42题(b):$\left\{0^n\# 0^{2n} \# 0^{3n}|n\geq 0\right\}$
+	\begin{solution}
+		假设题设语言 A 是 CFL，令 p 是泵长度，\( s = 0^p\#0^{2p}\#0^{3p} \)，s 被分成五段 \( s = uvxyz \)。根据泵引理，有 \( |vxy| \leq p \)，则：1. 如果 v 或 y 包含 \#，则当 \( i = 0 \) 时，uxz 仅包含一个 \#，不属于 A。2. 如果 v 或 y 都不包含 \#，若两者在同一侧，则 \( i = 0 \) 时 \# 两侧的字符串显然不满足倍数关系，显然不属于 A；两者分别在 \# 左侧和右侧，且由 \( |vy| \leq p \) 可知，uvy 仅能包含两段 0 串，当 \( i = 0 \) 时，u 和 y 所在的 0 串可能满足倍数关系，但未包含的另一段 0 串显然不满足倍数关系，不属于 A。
+    与 CFL 的泵引理矛盾。综上可知：A 不是 CFL。
+	\end{solution}
+
+
+        
+	\part 2.42题(c):$\left\{\omega \# t|\omega,t\in \left\{a,b\right\}^*,\text{且} \omega \text{是} t\text{的子串}\right\}$
+	\begin{solution}
+		假设题设语言 A 是 CFL，令 p 是泵长度，\( s = 0^p1^p\#0^p1^p \)，s 被分成五段 \( s = uvxyz \)。根据泵引理，有 \( |vxy| \leq p \)，则：1. 如果 v 或 y 包含 \#，则当 \( i = 0 \) 时，uxz 不包含 \#，不属于 A。2. 如果 v 或 y 都不包含 \#：(1) 若两者都在左侧，则 \( i = 2 \) 时左侧的字符串显然比右侧长，不满足子串关系，显然不属于 A；(2) 若两者都在右侧，则 \( i = 0 \) 时左侧的字符串比右侧长，因此也不属于 A；(3) 两者分别在 \# 左侧和右侧，且由 \( |vy| \leq p \) 可知，\( v = 1^j, y = 0^k, j + k > 0 \)，故有 \( uv^ixy^iz = 0^p1^{p+(i-1)j}\#0^{p+(i-1)k}1^p \)，当 \( i = 0 \) 时，\( 0^p1^{p-j}\#0^{p-k}1^p \)，由于左侧 0 串比右侧长，不满足子串关系，也不属于 A。
+    与 CFL 的泵引理矛盾。综上可知：A 不是 CFL。
+	\end{solution}
+
+
+        
+			
+	\part 2.42题(d):$\left\{t_1 \# t_2 \#...\# t_k| k\geq 2,t_i\in \left\{a,b\right\}^*,\text{且存在} i\neq j \text{使得} t_i=t_j\right\}$
+	\begin{solution}
+		假设题设语言 A 是 CFL，令 p 是泵长度，\( s = a^pb^p\#a^pb^p \)，s 被分成五段 \( s = uvxyz \)。根据泵引理，有 \( |vxy| \leq p \)，则：1. 如果 v 或 y 包含 \#，则当 \( i = 0 \) 时，uxz 不包含 \#，即 k = 1，不属于 A。2. 如果 v 或 y 都不包含 \#，若两者在同一侧，则 \( i = 0 \) 时 \# 两侧的字符串不等长，显然不属于 A；两者分别在 \# 左侧和右侧，且由 \( |vy| \leq p \) 可知，\( v = b^j, y = a^k, j + k > 0 \)，故有 \( uv^ixy^iz = a^p b^{p+(i-1)j} \# a^{p+(i-1)k} b^p \)，当 \( i = 0 \) 时，\( a^p b^{p-j} \# a^{p-k} b^p \)，不属于 A。与 CFL 的泵引理矛盾。
+    综上可知：A 不是 CFL。
+	\end{solution}
+	\end{parts} 
+
+
+
+    
+	\question P100页, 2.56题。
+    给定语言$A,B$有$A \Diamond B=\left\{xy|x\in A,y\in B,\text{且}|x|=|y|\right\}$, 证明：如果$A,B$是正则语言，则$A \Diamond B$上下文无关。
+    \begin{solution}
+		假设 DFA \( M = (Q_1, \Sigma_1, \delta_1, q_1, F_1) \) 可以识别 A, DFA \( N = (Q_2, \Sigma_2, \delta_2, q_2, F_2) \) 可以识别 B，则：
+构造 PDA \( M' = (Q, \Sigma, \Gamma, \delta, q_0, F) \)，其中：
+\[
+Q = Q_1 \times Q_2, \quad \Gamma = \{X\}, \quad \Sigma = \Sigma_1 \cup \Sigma_2
+\]
+\(\delta\) 定义为：
+\begin{itemize}
+    \item 对 \( a \in \Sigma_1 \)，若 \( \delta_1(q_1, a) = q_1' \)，则 \( \delta((q_1, q_2), a, \varepsilon) = ((q_1', q_2), X) \)
+    \item 对 \( b \in \Sigma_2 \)，若 \( \delta_2(q_2, b) = q_2' \)，则 \( \delta((q_1, q_2), b, X) = ((q_1, q_2'), \varepsilon) \)
+\end{itemize}
+\[
+q_0 = (q_1, q_2), \quad F = \{(q_1, q_2) \mid q_1 \in F_1, q_2 \in F_2\}
+\]
+当栈为空且处于接收状态时接受。当栈为空时，则满足 \( |x| = |y| \)。\( M' \) 能够识别 \( A \circ B \)。如果 A, B 是正则语言，则 \( A \circ B \) 上下文无关。
+	\end{solution} 
+
+
+    
+    \question P100页, 2.57题。
+    设$A=\left\{\omega t \omega^{R}| \omega,t\in \left\{0,1\right\}^* \text{且} |\omega|=|t|\right\}$,证明：A不是上下文无关语言。
+    \begin{solution}
+		(提示：$s=1^{2p}0^p1^p1^{2p}$)
+        假设题设语言 A 是 CFL，令 p 是泵长度， $s=1^{2p}0^p1^p1^{2p}$ ，s 被分成五段 \( s = uvxyz \)。根据泵引理，有 \( |vxy| \leq p, |vy| > 0 \)，则：
+        
+        1. 如果 vy 都处于前 2p 个字符，则当 \( i = 0 \) 时，\( uxz = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，\(w'\) 只包含1而 \( w \) 包含 0，\( w' \neq w^R \)，故不属于 A。
+        
+        2. 如果 vy 都处于后 3p 个字符，则当 \( i = 2 \) 时 \( uv^2xy^2z = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，\( w' \) 只包含1而 w 包含 0，\( w' \neq w^R \)，故不属于 A。
+        
+        3. 如果 vy 只包含0，则当 \( i = 2 \) 时 \( uv^2xy^2z = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，\( w' \) 只包含1而 w 包含 0，\( w' \neq w^R \)，故不属于 A。
+
+        4. 如果 vy 包含0和前2p中的1，则当 \( i = 0 \) 时，\( uxz = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，\(w'\) 只包含1而 \( w \) 包含 0，\( w' \neq w^R \)，故不属于 A。
+
+        5. 如果 vy 包含0和后3p中的1，则当 \( i = 2 \) 时 \( uv^2xy^2z = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，\( w' \) 只包含1而 w 包含 0，\( w' \neq w^R \)，故不属于 A。
+        
+        则包含部分 0 和部分 1，同样的当 \( i = 2 \) 时，\( uv^2xy^2z = wtw' \) 在 \( |w| = |t| = |w'| \) 条件下，w 只包含零而 \( w' \) 包含 1，\( w' \neq w^R \)，故不属于 A。
+与 CFL 的泵引理矛盾。综上可知：A 不是 CFL。
+	\end{solution}
+
+
+
+
+    
+	\question 课外题：证明下列语言是上下文无关语言。
+\begin{parts}
+	\part  $A=\{a^ib^jc^k|i,j,k\geq 0, \text{\ 且 }  i=j \text{ 或 } j=k\}$
+\begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+ V=\{S_0,A,B,C,D\}
+\]
+\[
+ \Sigma=\{a,b,c\}
+\]
+\[
+ R=\{S_0\rightarrow AB \mid CD, A\rightarrow aAb \mid \epsilon, B\rightarrow cB \mid \epsilon , C\rightarrow aC\mid \epsilon, D\rightarrow bDc \mid \epsilon\}
+\]
+\[
+  S=S_0
+\]
+G 能够识别 A。
+\end{solution}
+
+
+	\part  $B=\{a^ib^jc^k|i,j,k\geq 0, \text{\ 且 }  i+j=k \}$
+\begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+ V=\{S_0,A\}
+\]
+\[
+ \Sigma=\{a,b,c\}
+\]
+\[
+ R=\{S_0\rightarrow aS_0c \mid A, A\rightarrow bAc \mid \epsilon\}
+\]
+\[
+  S=S_0
+\]
+G 能够识别 B。
+\end{solution}
+
+	\part  $C=\{a^ib^jc^k|i,j,k\geq 0, \text{\ 且 }  i+k=j \}$
+\begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+ V=\{S_0,A,B\}
+\]
+\[
+ \Sigma=\{a,b,c\}
+\]
+\[
+ R=\{S_0\rightarrow AB , A\rightarrow aAb \mid \epsilon , B\rightarrow bBc \mid \epsilon\}
+\]
+\[
+  S=S_0
+\]
+G 能够识别 C。
+\end{solution}
+
+    \part $D=\{a^{2n}b^{3n}|n\geq 0\}$
+\begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+ V=\{S_0\}
+\]
+\[
+ \Sigma=\{a,b\}
+\]
+\[
+ R=\{S_0\rightarrow aaS_0bbb \mid \epsilon\}
+\]
+\[
+  S=S_0
+\]
+G 能够识别 D。
+\end{solution}
+
+	\part $E=\{a^{n}b^{m}|0<n\leq m\leq  3n\}$
+\begin{solution}
+令 CFG \( G = (V, \Sigma, R, S) \) 能识别题设语言，则 \( G \) 的构造如下：
+\[
+ V=\{S_0\}
+\]
+\[
+ \Sigma=\{a,b\}
+\]
+\[
+ R=\{S_0\rightarrow ab \mid abb \mid abbb \mid aS_0b \mid aS_0bb \mid aS_0bbb\}
+\]
+\[
+  S=S_0
+\]
+G 能够识别 E。
+\end{solution}
+\end{parts}
+	
+\end{questions} 	
+\end{document}
+ 
