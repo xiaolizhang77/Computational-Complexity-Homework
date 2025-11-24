@@ -1,0 +1,240 @@
+ 
+
+%请使用xelatex编译
+\documentclass[11pt,addpoints,answers]{exam}
+
+
+\input{header}
+
+
+
+\newcommand{\hwnum}{3}
+\newcommand{\duedate}{11月24日} % changing this does  e :)
+\newcommand{\studentname}{}
+
+% END OF SUPPLIED VARIABLES
+
+\hwheader                       % execute homework commands
+
+\begin{document}
+	
+ 
+	
+	\pagestyle{head}                % put header on every page
+\begin{itemize}
+	\item 请将PDF文件发送至邮箱：complexity\_buaa@163.com
+	\item 文件命名规则是``学号-姓名-第三次作业.pdf"
+	\item 答案请用\LaTeX，打分基于认真性、正确性和描述的清晰性
+	\item 务必独立自主解题
+	\item 作业截止时间为 \textbf{\duedate}.
+\end{itemize}
+
+
+	\begin{questions}
+		
+		
+		\question P118页, 3.2题。此练习与图灵机$M_1$有关, 例3.5给出了它的描述及状态图。在下列每个输入串上，给出$M_1$所进入的格局序列。
+		
+		\begin{parts}
+			
+			\part (c)$1\#\#1$
+			\begin{solution}
+				
+                $q_11\#\#1$
+                
+                $xq_3\#\#1$
+                
+                $x\#q_5\#1$
+
+                $x\#\#q_r$
+                
+			\end{solution}
+			
+			\part (e)$10\#10$
+			\begin{solution}
+
+                $q_110\#10$
+
+                $xq_30\#10$
+
+                $x0q_3\#10$
+
+                $x0\#q_510$
+
+                $x0q_6\#x0$
+
+                $xq_70\#x0$
+
+                $q_7x0\#x0$
+
+                $xq_10\#x0$
+
+                $xxq_2\#x0$
+
+                $xx\#q_4x0$
+
+                $xx\#xq_40$
+
+                $xx\#q_6xx$
+
+                $xxq_6\#xx$
+
+                $xq_7x\#xx$
+
+                $xxq_1\#xx$
+
+                $xx\#q_8xx$
+
+                $xx\#xq_8x$
+
+                $xx\#xxq_8$
+
+                $xx\#xxq_{acc}$
+			\end{solution}
+			
+			
+			
+		\end{parts}
+		
+		\question P119页, 3.8.下面的语言都是字母表$\{0,1\}$上的语言, 以实现层次的描述给出判定这些语言的图灵机：
+		\begin{parts}	
+			\part	(b). $\{\omega|\omega\text{所包含的0的个数是1的个数的两倍}\}$
+			\begin{solution}
+				
+                设计双带图灵机：
+                
+                第一条带子为输入序列。
+                第二条带子读写头不动，只用第一个位置记录0个数的两倍和1的个数之差。
+                
+                初始将第二条带子第一个位置写为0.
+                
+                从左向右扫描第一条带子，如果当前位置输入是0，则第二条带子上第一个位置数加2；如果为1，则减1。
+                
+                当读取到输入终止符时，检查第二个带子上的计数，如果是0则接受，反之不接受。
+			\end{solution}
+			
+			
+			\part	(c). $\{\omega|\omega\text{所包含的0的个数不是1的个数的两倍}\}$
+			\begin{solution}
+				使用第一题能够判断“0的个数是1的个数的两倍”的图灵机 M。
+                若M接受，则拒绝；若M拒绝，则接受。
+			\end{solution}
+		\end{parts}
+		
+		
+		\question P119页, 3.11题.
+		证明： 不能在带子的输入区域写的单带图灵机只能识别正则语言。
+		\begin{solution}
+			
+            若图灵机不能在输入区域写，则它相当于一个只读图灵机。            
+            
+            只读图灵机的行为等价于有限自动机，其状态转移仅依赖于当前读头位置和状态。
+            
+            因此，它只能识别正则语言。
+			
+		\end{solution}  
+		
+		
+		\question P119页, 3.12题.
+		证明每一个无穷图灵可识别语言都有一个无穷可判定子集。
+		\begin{solution}
+			
+            设 L 是无穷的图灵可识别语言，由枚举器 E 枚举。
+            
+            构造子集 S：选取 E 输出的第一个串 w1，然后选取下一个比 w1 长的串 w2，依此类推。
+            
+            S 是无穷的，且是可判定的，因为我们可以判断一个串是否在 S 中（模拟 E 直到输出该串或更长的串）。
+			
+		\end{solution}  
+		
+		\question P119页, 3.14题.
+		设图灵可识别语言$B=\left\{\langle M_{1}\rangle ,\langle M_{2}\rangle ... \right\}$由图灵机的描述组成，证明存在一个以图灵机作为输入字符的图灵可识别语言$C$，使得在$B$中的每一个图灵机在$C$中也有一个图灵机与之等价，反之亦然。
+		\begin{solution}
+			构造 C = $\{$ ⟨M⟩ | M 等价于 B 中某个 Mi $\}$。
+            
+            可以构造一个枚举器，枚举所有与 B 中机器等价的图灵机。
+            
+            因此 C 是图灵可识别的。
+			
+		\end{solution}  
+		
+		\question P119页, 3.15题
+		证明图灵可识别语言类在下列运算下封闭：
+		a.并 b.连接 c.星号 d.交 e.同态
+		\begin{solution}
+			a. 并：使用双带图灵机模拟两个识别器，若有一个接受则接受。  
+            
+            b. 连接：非确定性地猜测分割点，模拟两个识别器。  
+            
+            c. 星号：非确定性地猜测分割点并模拟多次。  
+            
+            d. 交：使用双带图灵机模拟两个识别器，若都接受则接受。  
+            
+            e. 同态：对输入应用同态后模拟原识别器。
+			
+		\end{solution}  
+		
+		\question P119页, 3.16题
+		证明可判定语言类在下列运算下封闭：
+		a.并 b.连接 c.星号 d.补 e.交
+		\begin{solution}
+			
+            a. 并：模拟两个判定器，若有一个接受则接受。  
+
+            b. 连接：枚举所有分割点，模拟两个判定器。  
+            
+            c. 星号：动态规划判断是否可由多个子串连接而成。  
+            
+            d. 补：交换接受和拒绝状态。  
+            
+            e. 交：模拟两个判定器，若都接受则接受。
+			
+		\end{solution}   
+		
+		
+		\question P119页, 3.17题
+		只写一次图灵机 （write-once Turing machine) 是一个单带图灵机， 它在每个带子方格上最多只
+		能改变其内容一次（包括带子上的输入区）。 证明图灵机模型的这个变形等价于普通的图灵机模
+		型。 （ 提示： 首先考虑如下图灵机： 可以修改带子方格最多两次， 使用多个带子。）
+		\begin{solution}
+			
+            使用带子记录修改历史。
+            
+            每次“写一次”限制被违反时，将所有内容复制到带子后端并用$\#$和原先内容隔开继续模拟。
+            
+            因此只写一次图灵机可以模拟普通图灵机。
+			
+		\end{solution}  
+		
+		\question P119页, 3.18题
+		双无限带图灵机 （Turing machine with doubly infinite tape) 与普通图灵机相似， 所不同的是它的
+		带子向左和向右都是无限的。 此带子在开始时， 除了包括输人区域外 ， 其他都填以空白符， 计
+		算也像通常一样定义， 只是在它向左移动时不会遇到带子的端点。 证明这种类型的图灵机识别
+		图灵可识别语言类。
+		\begin{solution}
+			
+            用普通图灵机模拟双无限带：将双无限带对折成两个半带，用两个带子模拟。
+            
+            反之，双无限带图灵机只需要记录读写头初始位置，就可以模拟普通图灵机。
+            
+            因此两者等价。
+			
+		\end{solution} 
+		
+			\question P119页, 3.19题。
+		左复位图灵机与普通图灵机相似， 只是它的转移函数具有以下形式：
+		\[
+		\delta:Q\times T\rightarrow Q\times T\times \{R,\text{RESET}\}
+		\]
+		如果 $\delta(q,a)=(r,b,\text{RESET})$，则当机器处于状态 $q$ 且读 $a$ 时，在带上上写下 $b$ 并进入状态 $r$后，读写头就跳到带子的左端点。证明左复位图灵机识别图灵可识别语言类。
+		\begin{solution}
+			用普通图灵机模拟左复位图灵机：在带上标记复位位置，每次复位时移动到头。
+            
+            反之，左复位图灵机只需要忽略 RESET 功能，就可以模拟普通图灵机。
+            
+            因此两者等价。
+			
+		\end{solution}
+	\end{questions}
+	
+\end{document}
