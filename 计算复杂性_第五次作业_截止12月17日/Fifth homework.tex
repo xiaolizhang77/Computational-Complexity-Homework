@@ -1,0 +1,606 @@
+%% HOW TO USE THIS TEMPLATE:
+ 
+
+
+%请使用xelatex编译
+\documentclass[11pt,addpoints,answers]{exam}
+
+
+% required macros -- get header.tex file from course web page
+\input{header}
+
+% VARIABLES
+
+\newcommand{\hwnum}{5}
+\newcommand{\duedate}{12月17日晚23:59前} % changing this does not change the
+                                % actual due date :)
+\newcommand{\studentname}{}
+
+% END OF SUPPLIED VARIABLES
+
+\hwheader                       % execute homework commands
+
+\begin{document}
+
+\pagestyle{head}                % put header on  
+
+\pagestyle{head}                % put header on  
+
+\begin{itemize}
+	\item 请将PDF文件发送至邮箱：complexity\_buaa@163.com
+	\item 文件命名规则是``学号-姓名-第五次作业.pdf"
+	\item 务必独立自主解题
+	\item 作业截止时间为 \textbf{\duedate}.
+\end{itemize}
+
+\medskip
+
+
+ 
+
+% QUESTIONS START HERE.  PROVIDE SOLUTIONS WITHIN THE "solution"
+% ENVIRONMENTS FOLLOWING EACH QUESTION.
+
+\begin{questions}
+
+
+\question P151, 5.1题。
+证明$EQ_{\textit{CFG}}$是不可判定的。
+\begin{solution}
+    通过归约来证明。已知：
+    \[
+    ALL_{\text{CFG}} = \{ \langle G \rangle \mid G \text{是CFG，且} L(G) = \Sigma^* \}
+    \]
+    是不可判定的。
+    
+    现在构造从$ALL_{\text{CFG}}$到$EQ_{\text{CFG}}$的归约。给定任意CFG $G$，构造两个CFG $G_1$和$G_2$如下：
+    \begin{enumerate}
+        \item 令$G_1 = G$。
+        \item 构造$G_2$使得$L(G_2) = \Sigma^*$。这总是可行的，因为$\Sigma^*$是正则语言，因此也是上下文无关语言。
+    \end{enumerate}
+    
+    定义归约函数$f$为：
+    \[
+    f(\langle G \rangle) = \langle G_1, G_2 \rangle = \langle G, G_{\Sigma^*} \rangle
+    \]
+    其中$G_{\Sigma^*}$是生成$\Sigma^*$的固定CFG。
+    
+    下面证明归约的正确性：
+    \begin{enumerate}
+        \item 如果$\langle G \rangle \in ALL_{\text{CFG}}$，则$L(G) = \Sigma^* = L(G_{\Sigma^*})$，因此$\langle G, G_{\Sigma^*} \rangle \in EQ_{\text{CFG}}$。
+        \item 如果$\langle G \rangle \notin ALL_{\text{CFG}}$，则$L(G) \neq \Sigma^*$，而$L(G_{\Sigma^*}) = \Sigma^*$，因此$L(G) \neq L(G_{\Sigma^*})$，所以$\langle G, G_{\Sigma^*} \rangle \notin EQ_{\text{CFG}}$。
+    \end{enumerate}
+    
+    因此，$ALL_{\text{CFG}} \leq_m EQ_{\text{CFG}}$。由于$ALL_{\text{CFG}}$是不可判定的，所以$EQ_{\text{CFG}}$也是不可判定的。
+
+\end{solution}
+
+
+
+\question P151, 5.2题。
+证明$EQ_{\textit{CFG}}$是补图灵可识别的。
+\begin{solution}
+	设$G_1$和$G_2$是两个上下文无关文法（CFG），其字母表为$\Sigma$。
+    我们需要证明存在一个图灵机可以识别：
+    \[
+    \overline{EQ_{\text{CFG}}} = \{\langle G_1, G_2 \rangle \mid L(G_1) \neq L(G_2)\}
+    \]
+    \noindent \textbf{构造识别机$M$：}
+    \begin{enumerate}[label=步骤\arabic*:, leftmargin=*]
+        \item 输入为$\langle G_1, G_2 \rangle$。
+        \item 枚举所有字符串$x \in \Sigma^*$（按标准顺序，如短lex序）。
+        \item 对每个枚举的字符串$x$，并行地进行以下测试：
+        \begin{itemize}
+            \item 测试$x \in L(G_1)$且$x \notin L(G_2)$
+            \item 测试$x \in L(G_2)$且$x \notin L(G_1)$
+        \end{itemize}
+        \item 对于每个$x$，利用两个CFG的成员资格判定算法（由于CFG的成员资格问题是可判定的，存在算法判断$x \in L(G)$）。
+        \item 如果发现某个$x$使得上述任一条件成立，则$M$接受$\langle G_1, G_2 \rangle$。
+    \end{enumerate}
+    
+    \noindent \textbf{正确性分析：}
+    \begin{itemize}
+        \item 如果$L(G_1) \neq L(G_2)$，则必然存在某个$x$在对称差中，因此$M$最终会发现这样的$x$并接受。
+        \item 如果$L(G_1) = L(G_2)$，则对所有$x$，两个测试都会失败，$M$将永不停机（即永远搜索下去）。这符合识别机的定义：对于不在语言中的输入，$M$可能永不停机。
+    \end{itemize}
+    
+    因此，$M$识别了$\overline{EQ_{\text{CFG}}}$，即$\overline{EQ_{\text{CFG}}}$是图灵可识别的。
+\end{solution}
+
+
+
+
+
+
+
+\question P151,5.4题。
+如果$A\leq _{m} B$且$B$是一个正则语言，这是否蕴涵着$A$也是一个正则语言？为什么？
+\begin{solution}
+    	题目中 $A \leq_m B$ 仅要求 $f$ 是可计算函数，不要求 $f$ 是正则的或线性的。因此即使 $B$ 是正则语言，$A$ 也可以是任意图灵可识别的语言（甚至可判定语言），包括非正则语言。例如：
+    \begin{itemize}
+        \item $B = \emptyset$（正则）
+        \item $A$ 是任意语言，定义 $f(x) = \text{某个不在 } B \text{ 中的字符串若 } x \notin A$，\\否则 $f(x) = \text{某个在 } B \text{ 中的字符串}$。
+    \end{itemize}
+    实际上，如果 $B$ 是正则语言且 $B \neq \emptyset$ 且 $B \neq \Sigma^*$，那么仍可构造非正则的 $A$ 通过一个复杂的可计算 $f$ 归约到 $B$。例如，令 $A$ 为不可判定的语言，$B = \{0\}$（正则），则存在可计算函数 $f$ 将 $A$ 归约到 $B$，只需将 $A$ 的成员映射到 $0$，非成员映射到 $1$（但 $1 \notin B$，所以 $x \notin A \Rightarrow f(x) \notin B$）。这可行，因为 $B$ 是正则的。
+    
+    结论：$A \leq_m B$ 且 $B$ 是正则语言 \textbf{不} 蕴涵 $A$ 是正则语言，因为 many-one 归约只要求 $f$ 可计算，不保留正则性。
+
+\end{solution}
+
+
+
+\question P151, 5.5题。
+证明$A_{\textit{TM}}$无法映射归约到$E_{\textit{TM}}$。换句话说，也就是证明没有可计算函数可以将$A_{\textit{TM}}$归约为$E_{\textit{TM}}$。（提示：用$A_{\textit{TM}}$和$E_{\textit{TM}}$的一些已知的矛盾和事实来证明。）
+\begin{solution}
+	已知：$E_{\text{TM}}$ 不是图灵可识别的。
+    % \begin{enumerate}
+    %     \item $E_{\text{TM}}$ 不是图灵可识别的。
+    %     % \item $\overline{E_{\text{TM}}}$ 是图灵可识别的。
+    % \end{enumerate}
+    
+    如果 $A_{\text{TM}} \leq_m E_{\text{TM}}$，那么因为 $E_{\text{TM}}$ 不是可识别的，所以 $A_{\text{TM}}$ 也必须是不可识别的（因为可识别性在映射归约下反向传递：如果 $A$ 可识别且 $A \leq_m B$，则 $B$ 可识别；等价地，如果 $B$ 不可识别且 $A \leq_m B$，则 $A$ 不可识别）。
+    
+    但已知 $A_{\text{TM}}$ 是可识别的，矛盾。
+    
+    因此，假设错误，不存在这样的可计算函数 $f$。
+    故 $A_{\text{TM}} \not\leq_m E_{\text{TM}}$
+\end{solution}
+
+
+\question P151,5.7题。
+证明：如果$A$是图灵可识别的，且$A\leq _{m} \overline{A}$，则A是可判定的。
+\begin{solution}
+	设 $f$ 是归约函数，即存在可计算函数 $f$ 使得
+    \[
+    x \in A \iff f(x) \in \overline{A} \quad \text{对任意输入 } x
+    \]
+    等价地，
+    \[
+    x \in A \iff f(x) \notin A
+    \]
+    
+    由于 $A$ 是图灵可识别的，存在图灵机 $M$ 识别 $A$，即 $L(M) = A$。  
+    同样地，$\overline{A}$ 也是图灵可识别的吗？不一定，但我们可以利用归约的性质。
+    
+    考虑以下判定 $A$ 的算法：
+    
+    \noindent \textbf{算法构造：}
+    输入 $x$：
+    \begin{enumerate}
+        \item 计算 $f(x)$。
+        \item 并行运行以下两个过程：
+        \begin{itemize}
+            \item 过程1：在输入 $x$ 上运行 $A$ 的识别器 $M$（如果 $x \in A$，此过程会接受）。
+            \item 过程2：在输入 $f(x)$ 上运行 $A$ 的识别器 $M$（如果 $f(x) \in A$，此过程会接受）。
+        \end{itemize}
+        \item 等待其中一个过程接受：
+        \begin{itemize}
+            \item 如果过程1接受，则 $x \in A$，输出“接受”。
+            \item 如果过程2接受，则 $f(x) \in A$，根据归约性质 $x \notin A$，输出“拒绝”。
+        \end{itemize}
+    \end{enumerate}
+    
+    \noindent \textbf{正确性证明：}
+    我们需要证明上述算法一定会终止，并且正确判定 $x$ 是否属于 $A$。
+    
+    根据归约性质 $x \in A \iff f(x) \notin A$，所以 $x$ 和 $f(x)$ 恰好有一个属于 $A$。因此：
+    \begin{itemize}
+        \item 如果 $x \in A$，则过程1会接受（因为 $M$ 识别 $A$），过程2不会接受（因为 $f(x) \notin A$）。
+        \item 如果 $x \notin A$，则 $f(x) \in A$，过程2会接受，过程1不会接受。
+    \end{itemize}
+    
+    所以无论如何，两个过程中总有一个会接受，算法必然在有限步内停止（因为 $M$ 是识别器，对属于 $A$ 的输入一定会接受）。当算法停止时，它能正确输出 $x \in A$ 或 $x \notin A$。
+    
+    因此， $A$ 是可判定的。
+\end{solution}
+
+
+
+\question P151,5.10题。
+证明当且仅当$A\leq _{m} A_\text{TM}$时，A是图灵可识别的。
+\begin{solution}
+	\noindent \textbf{（充分性 $\Rightarrow$）} 假设 $A$ 是图灵可识别的。  
+    存在图灵机 $M_A$ 识别 $A$，即 $L(M_A) = A$。定义归约函数 $f$ 如下：
+    \[
+    f(x) = \langle M_A, x \rangle
+    \]
+    这里 $f$ 是可计算的，因为给定 $x$，我们可以输出描述 $M_A$ 的编码和 $x$ 的字符串 $\langle M_A, x \rangle$。
+    
+    现在验证归约的正确性：
+    \[
+    x \in A \iff M_A \text{ 接受 } x \iff \langle M_A, x \rangle \in A_{\text{TM}}
+    \]
+    因此 $A \leq_m A_{\text{TM}}$。
+    
+    \vspace{0.5em}
+    \noindent \textbf{（必要性 $\Leftarrow$）} 假设 $A \leq_m A_{\text{TM}}$。  
+    由于 $A_{\text{TM}}$ 是图灵可识别的（存在通用图灵机识别它），且图灵可识别性在映射归约下保持：若 $A \leq_m B$ 且 $B$ 可识别，则 $A$ 可识别。  
+    因此 $A$ 是图灵可识别的。
+\end{solution}
+
+
+\question P151,5.11题。
+证明当且仅当$A\leq _{m} 0*1*$时，A是可判定的。
+\begin{solution}
+
+    \noindent \textbf{1. ($\Rightarrow$)：若 $A$ 可判定，则 $A \leq_m 0^*1^*$。}
+    
+    设 $A$ 是可判定的，则存在图灵机 $M$ 判定 $A$。构造一个可计算函数 $f$，使得
+    \[
+    x \in A \iff f(x) \in 0^*1^*.
+    \]
+    定义 $f$ 如下：
+    \[
+    f(x) = 
+    \begin{cases}
+    0 & \text{如果 } x \in A, \\
+    1 & \text{如果 } x \notin A.
+    \end{cases}
+    \]
+    由于 $M$ 判定 $A$，我们可以计算 $f(x)$：先运行 $M$ 在 $x$ 上，根据 $M$ 接受或拒绝，分别输出 $0$ 或 $1$。
+    
+    现在验证归约的正确性：
+    \begin{itemize}
+        \item 如果 $x \in A$，则 $f(x) = 0 \in 0^*1^*$。
+        \item 如果 $x \notin A$，则 $f(x) = 1$。注意 $1 \in 0^*1^*$（取 $i=0, j=1$），因此 $f(x) \in 0^*1^*$ 仍然成立。
+    \end{itemize}
+    这意味着对所有 $x$，$f(x) \in 0^*1^*$，即 $f$ 将所有输入映射到 $0^*1^*$ 中。这导致归约无法区分 $A$ 的成员与非成员。事实上，上述构造有误，因为它使得 $x \in A$ 和 $x \notin A$ 都映射到 $0^*1^*$ 中，不符合归约必须保持成员与非成员区分的要求。
+    
+    因此需要修改构造，使得 $f(x) \in 0^*1^*$ 当且仅当 $x \in A$。一种正确的构造如下：
+    
+    取 $y_0 \in 0^*1^*$（例如 $y_0 = \varepsilon$），$y_1 \notin 0^*1^*$（例如 $y_1 = 10$，因为 $10 \notin 0^*1^*$）。定义：
+    \[
+    f(x) = 
+    \begin{cases}
+    y_0 & \text{如果 } x \in A, \\
+    y_1 & \text{如果 } x \notin A.
+    \end{cases}
+    \]
+    由于 $A$ 可判定，$f$ 可计算，并且
+    \[
+    x \in A \iff f(x) = y_0 \in 0^*1^*,
+    \]
+    \[
+    x \notin A \iff f(x) = y_1 \notin 0^*1^*.
+    \]
+    因此 $A \leq_m 0^*1^*$。
+    
+    \vspace{1em}
+    \noindent \textbf{2. ($\Leftarrow$)：若 $A \leq_m 0^*1^*$，则 $A$ 可判定。}
+    
+    假设存在可计算函数 $f$ 使得 $x \in A \iff f(x) \in 0^*1^*$。由于 $0^*1^*$ 是正则语言，因此是可判定的（存在算法判定一个字符串是否属于 $0^*1^*$）。要判定 $A$，可对输入 $x$ 执行如下算法：
+    \begin{enumerate}
+        \item 计算 $f(x)$。
+        \item 判定 $f(x) \in 0^*1^*$ 是否成立（这是可判定的）。
+        \item 若成立则接受 $x$，否则拒绝 $x$。
+    \end{enumerate}
+    该算法总是终止，因为 $f$ 可计算且 $0^*1^*$ 可判定。根据归约性质，它正确判定 $A$。因此 $A$ 是可判定的。
+\end{solution}
+
+
+\question P151, 5.12题。
+设$J=\left\{w|\text{对于某个}x\in A_{\textit{TM}}\text{有}w=0x\text{，或对于某个}y\in \overline{A_{\textit{TM}}} \text{有} w=1y \right\}$。证明$J$和$\overline J$都不是图灵可识别的。
+\begin{solution}
+
+    证明更强的结论：如果 $J$ 可识别，则 $\overline{A_{\text{TM}}}$ 可识别；如果 $\overline{J}$ 可识别，则 $\overline{A_{\text{TM}}}$ 可识别。但已知 $A_{\text{TM}}$ 可识别，若 $\overline{A_{\text{TM}}}$ 也可识别，则 $A_{\text{TM}}$ 可判定，矛盾。因此 $J$ 与 $\overline{J}$ 均不可识别。
+    
+    具体地：
+    \begin{itemize}
+    \item 若 $J$ 可识别，则通过映射 $f(\langle M,w\rangle) = 1\langle M,w\rangle$，可得 $\overline{A_{\text{TM}}} \leq_m J$，从而 $\overline{A_{\text{TM}}}$ 可识别。
+    \item 若 $\overline{J}$ 可识别，则通过映射 $g(\langle M,w\rangle) = 0\langle M,w\rangle$，可得 $\overline{A_{\text{TM}}} \leq_m \overline{J}$，从而 $\overline{A_{\text{TM}}}$ 可识别。
+    \end{itemize}
+    但 $A_{\text{TM}}$ 可识别，$\overline{A_{\text{TM}}}$ 不可识别（否则 $A_{\text{TM}}$ 可判定）。矛盾。因此 $J$ 与 $\overline{J}$ 均不可识别。
+\end{solution}
+
+
+\question P151,5.13题。
+给出一个不可判定语言B的例子，使得$B\leq _{m} \overline{B}$。
+\begin{solution}
+	一个标准例子是：
+    \[
+    B = A_{\mathrm{TM}} \oplus \overline{A_{\mathrm{TM}}} = \{0x \mid x \in A_{\mathrm{TM}}\} \cup \{1x \mid x \in \overline{A_{\mathrm{TM}}}\}.
+    \]
+    这正是5.12题中的 $J$。已经证明 $J$ 和 $\overline{J}$ 都不可识别，因此 $J$ 不可判定。而且显然有 $J \leq_m \overline{J}$，只需定义 $f(0x) = 1x$，$f(1x) = 0x$ 即可，这满足：
+    \[
+    w \in J \iff f(w) \in \overline{J}.
+    \]
+    函数 $f$ 可计算，因此 $J$ 即为所求的不可判定语言 $B$。
+\end{solution}
+
+
+
+ 
+
+
+
+
+\question P152, 5.16题。
+\textbf{赖斯定理} \quad 设$P$是任何图灵机的语言的非平凡属性。证明确定某一图灵机的语言是否具有属性$P$这一问题是不可判定的。更正式地说，设$P$是一个语言，它由图灵机的描述组成，且$P$满足下列两个条件：首先，$P$是非平凡的——它包含某些图灵机的描述，但不是所有的；其次，$P$是图灵机的语言的属性——无论何时$L(M_{1})=L(M_{2})$，当且仅当$\left \langle M_{2} \right \rangle \in P $时，有$\left \langle M_{1} \right \rangle \in P $，此处的$M_{1} $和$M_{2} $是任意图灵机。证明$P$是一个不可判定语言。
+\begin{solution}
+
+	\subsection*{证明思路}
+    通过归约 $A_{\mathrm{TM}} \leq_m P$ 或 $A_{\mathrm{TM}} \leq_m \overline{P}$ 来证明。由于 $A_{\mathrm{TM}}$ 不可判定，因此 $P$ 不可判定。需要根据 $P$ 是否包含空语言 $\emptyset$ 分两种情况构造归约。
+    
+    \subsection*{证明细节}
+    设 $M_P$ 是一台语言属于 $P$ 的图灵机（由非平凡性，这样的 $M_P$ 存在），设 $M_{\emptyset}$ 是一台语言为空集（即 $L(M_{\emptyset}) = \emptyset$）且 $\langle M_{\emptyset} \rangle \notin P$ 的图灵机（由非平凡性，若空语言在 $P$ 中，则取另一不在 $P$ 中的语言对应的机器）。下面分两种情况。
+    
+    \noindent \textbf{情况1：空语言 $\emptyset \notin P$（即 $\langle M_{\emptyset} \rangle \notin P$）。} \\
+    构造从 $A_{\mathrm{TM}}$ 到 $P$ 的归约 $f$。
+    
+    对输入 $\langle M, w \rangle$，定义 $f(\langle M, w \rangle) = \langle M' \rangle$，其中 $M'$ 为如下图灵机：
+
+    \[
+    M' = \text{“对输入 } x:
+    ]\
+    \begin{enumerate}
+        \item 模拟 $M$ 在输入 $w$ 上运行。
+        \item 如果 $M$ 接受 $w$，则模拟 $M_P$ 在输入 $x$ 上运行并接受当且仅当 $M_P$ 接受。
+        \item 如果 $M$ 拒绝 $w$，则拒绝 $x$（或循环）。”
+    \end{enumerate}
+
+    更准确地说，步骤2中若 $M$ 接受 $w$，则 $M'$ 完全按照 $M_P$ 的行为运行；步骤3中若 $M$ 拒绝 $w$，则 $M'$ 直接拒绝所有 $x$（或进入循环，使 $L(M') = \emptyset$）。
+    
+    \noindent \textbf{分析 $M'$ 的语言：}
+    \begin{itemize}
+        \item 若 $M$ 接受 $w$，则 $M'$ 的行为与 $M_P$ 相同，因此 $L(M') = L(M_P)$，从而 $\langle M' \rangle \in P$（因为 $P$ 是语言属性）。
+        \item 若 $M$ 不接受 $w$（拒绝或不停机），则 $M'$ 不会执行到步骤2，对所有 $x$ 都拒绝（或不停机），因此 $L(M') = \emptyset$，从而 $\langle M' \rangle \notin P$（因为 $\emptyset \notin P$）。
+    \end{itemize}
+    因此，
+    \[
+    \langle M, w \rangle \in A_{\mathrm{TM}} \iff L(M') = L(M_P) \iff \langle M' \rangle \in P.
+    \]
+    故 $f$ 实现了归约 $A_{\mathrm{TM}} \leq_m P$，从而 $P$ 不可判定。
+    
+    \vspace{1em}
+    \noindent \textbf{情况2：空语言 $\emptyset \in P$（即 $\langle M_{\emptyset} \rangle \in P$）。} \\
+    此时考虑 $\overline{P}$，显然 $\emptyset \notin \overline{P}$。由情况1的结论（将 $P$ 换为 $\overline{P}$）可知 $\overline{P}$ 不可判定，从而 $P$ 也不可判定。
+    
+    更直接地，我们构造从 $A_{\mathrm{TM}}$ 到 $\overline{P}$ 的归约。取 $M_{\text{nonP}}$ 为一台语言不在 $P$ 中的图灵机（由非平凡性存在）。对输入 $\langle M, w \rangle$，构造 $M''$：
+    \[
+    M'' = \text{“对输入 } x:
+     \]
+    \begin{enumerate}
+        \item 模拟 $M$ 在 $w$ 上运行。
+        \item 如果 $M$ 接受 $w$，则模拟 $M_{\text{nonP}}$ 在 $x$ 上运行并接受当且仅当 $M_{\text{nonP}}$ 接受。
+        \item 如果 $M$ 拒绝 $w$，则拒绝 $x$。”
+    \end{enumerate}
+
+    分析：
+    \begin{itemize}
+        \item 若 $M$ 接受 $w$，则 $L(M'') = L(M_{\text{nonP}})$，故 $\langle M'' \rangle \notin P$，即 $\langle M'' \rangle \in \overline{P}$。
+        \item 若 $M$ 不接受 $w$，则 $L(M'') = \emptyset$，由于 $\emptyset \in P$，故 $\langle M'' \rangle \in P$，即 $\langle M'' \rangle \notin \overline{P}$。
+    \end{itemize}
+    因此 $\langle M, w \rangle \in A_{\mathrm{TM}} \iff \langle M'' \rangle \in \overline{P}$，即 $A_{\mathrm{TM}} \leq_m \overline{P}$，故 $\overline{P}$ 不可判定，从而 $P$ 也不可判定。
+    
+    \subsection*{总结}
+    无论空语言是否属于 $P$，我们都可以构造从 $A_{\mathrm{TM}}$ 到 $P$ 或 $\overline{P}$ 的归约，从而证明 $P$ 是不可判定的。这就完成了赖斯定理的证明。
+    
+\end{solution}
+
+
+\question P152, 5.18题。
+使用问题5.16中的赖斯定理，证明下列语言是不可判定的：
+\begin{parts} 
+	\part   $INFINITE_{TM}=\{\langle M\rangle|M\text{是一个图灵机，且}L(M)\text{是一个无限语言}\}$.
+	\begin{solution}
+		\begin{itemize}
+    \item \textbf{非平凡性：} 
+    \begin{enumerate}
+        \item 存在图灵机 $M_1$ 使得 $L(M_1)$ 是无限的（例如 $M_1$ 接受所有串，则 $L(M_1) = \Sigma^*$ 无限），故 $\langle M_1 \rangle \in INFINITE_{\mathrm{TM}}$。
+        \item 存在图灵机 $M_2$ 使得 $L(M_2)$ 是有限的（例如 $M_2$ 拒绝所有串，则 $L(M_2) = \emptyset$ 有限），故 $\langle M_2 \rangle \notin INFINITE_{\mathrm{TM}}$。
+    \end{enumerate}
+    \item \textbf{语言属性：} 若 $L(M) = L(M')$，则 $L(M)$ 无限当且仅当 $L(M')$ 无限，因此 $\langle M \rangle \in INFINITE_{\mathrm{TM}}$ 当且仅当 $\langle M' \rangle \in INFINITE_{\mathrm{TM}}$。
+\end{itemize}
+由赖斯定理，$INFINITE_{\mathrm{TM}}$ 不可判定。
+	\end{solution}
+	
+	\part 证明 $\{\langle M\rangle|M\text{是一个图灵机,且}1011\in L(M)\}$
+	\begin{solution}
+		记该语言为 $P_{1011}$。
+\begin{itemize}
+    \item \textbf{非平凡性：} 
+    \begin{enumerate}
+        \item 存在图灵机 $M_1$ 接受 $1011$（例如设计 $M_1$ 仅接受 $1011$），则 $\langle M_1 \rangle \in P_{1011}$。
+        \item 存在图灵机 $M_2$ 不接受 $1011$（例如 $M_2$ 拒绝所有串），则 $\langle M_2 \rangle \notin P_{1011}$。
+    \end{enumerate}
+    \item \textbf{语言属性：} 若 $L(M) = L(M')$，则 $1011 \in L(M)$ 当且仅当 $1011 \in L(M')$，因此 $\langle M \rangle \in P_{1011}$ 当且仅当 $\langle M' \rangle \in P_{1011}$。
+\end{itemize}
+由赖斯定理，$P_{1011}$ 不可判定。
+	\end{solution}
+	
+	\part 证明 $ALL_\text{TM}=\{\langle M\rangle|M\text{是一个图灵机,且}L(M)=\Sigma^*\}$
+	\begin{solution}
+		\begin{itemize}
+    \item \textbf{非平凡性：} 
+    \begin{enumerate}
+        \item 存在图灵机 $M_1$ 使得 $L(M_1) = \Sigma^*$（例如接受所有输入的图灵机），故 $\langle M_1 \rangle \in ALL_{\mathrm{TM}}$。
+        \item 存在图灵机 $M_2$ 使得 $L(M_2) \neq \Sigma^*$（例如拒绝所有输入的图灵机），故 $\langle M_2 \rangle \notin ALL_{\mathrm{TM}}$。
+    \end{enumerate}
+    \item \textbf{语言属性：} 若 $L(M) = L(M')$，则 $L(M) = \Sigma^*$ 当且仅当 $L(M') = \Sigma^*$，因此 $\langle M \rangle \in ALL_{\mathrm{TM}}$ 当且仅当 $\langle M' \rangle \in ALL_{\mathrm{TM}}$。
+\end{itemize}
+由赖斯定理，$ALL_{\mathrm{TM}}$ 不可判定。
+	\end{solution}
+	
+\end{parts}
+
+
+
+
+
+
+
+\question P152, 5.25题。
+
+设$T=\{\langle M\rangle|M\text{是一个图灵机,每当}M\text{接受}\omega \text{时，}M\text{也接受}\omega^{R}\}$，证明T是不可判定的。
+
+\begin{solution}
+	应用赖斯定理，因为 $T$ 是图灵机语言的非平凡性质，故 $T$ 不可判定。
+\end{solution}
+
+
+
+
+\question P152, 5.26题。
+考虑这样的问题：一个双带图灵机，当它在输入$w$上运行时，检查它是否在第二条带子上写下一个非空白符。将这个问题形式化为一个语言，并证明它是不可判定的。
+\begin{solution}
+	令 $M'$ 为如下双带图灵机：
+\begin{itemize}
+    \item 第一条带：初始内容为 $w$，用于模拟 $M$ 在 $w$ 上的运行（作为 $M$ 的单一工作带）。
+    \item 第二条带：初始全为空白，仅用于在 $M$ 接受时写入标记。
+    \item $M'$ 的转移函数确保：
+        \begin{enumerate}
+            \item 在模拟过程中，$M'$ 不在第二条带上写入任何符号（即保持读写头不动，或只读不写）。
+            \item 如果模拟中 $M$ 进入接受状态，则 $M'$ 在第二条带的当前位置写入一个非空白符号 $X$，然后停机。
+            \item 如果模拟中 $M$ 进入拒绝状态，则 $M'$ 直接停机，且不触碰第二条带（保持全空白）。
+            \item 如果 $M$ 永不停机，则 $M'$ 也永不停机，且第二条带保持全空白。
+        \end{enumerate}
+\end{itemize}
+
+\subsection*{归约函数}
+定义归约函数 $f(\langle M, w \rangle) = \langle M', w \rangle$，其中 $M'$ 是如上构造的双带图灵机（其描述可从 $\langle M, w \rangle$ 可计算地构造）。
+
+\subsection*{正确性证明}
+\begin{itemize}
+    \item 若 $\langle M, w \rangle \in A_{\text{TM}}$，即 $M$ 接受 $w$，则 $M'$ 在模拟过程中会进入 $M$ 的接受状态，从而在第二条带上写入 $X$，因此 $\langle M', w \rangle \in L_{\text{write}}$。
+    \item 若 $\langle M, w \rangle \notin A_{\text{TM}}$，则有两种情况：
+        \begin{enumerate}
+            \item $M$ 拒绝 $w$：则 $M'$ 模拟 $M$ 直到拒绝状态，然后停机，且从未在第二条带上写入非空白符号，故 $\langle M', w \rangle \notin L_{\text{write}}$。
+            \item $M$ 在 $w$ 上永不停机：则 $M'$ 也永不停机，且永远不会在第二条带上写入非空白符号，故 $\langle M', w \rangle \notin L_{\text{write}}$。
+        \end{enumerate}
+    \end{itemize}
+    因此，
+    \[
+    \langle M, w \rangle \in A_{\text{TM}} \iff \langle M', w \rangle \in L_{\text{write}}.
+    \]
+    即 $A_{\text{TM}} \leq_m L_{\text{write}}$。由于 $A_{\text{TM}}$ 不可判定，故 $L_{\text{write}}$ 也不可判定。
+\end{solution}
+
+
+\question P152, 5.36题。
+证明存在$\{1\}^*$的子集是不可判定的.
+\begin{solution}
+	设 $\Sigma = \{1\}$，则 $\Sigma^* = \{ \varepsilon, 1, 11, 111, \dots \} = \{1^n \mid n \ge 0\}$。
+
+    \begin{enumerate}
+        \item \textbf{可判定语言的数量：}
+        每个可判定语言对应一个总停机的图灵机（判定器）。由于图灵机的描述是有限字母表上的有限串，因此图灵机的总数是可数无穷的。从而，可判定语言的总数至多为可数无穷。
+    
+        \item \textbf{$\{1\}^*$ 的子集数量：}
+        $\{1\}^*$ 与自然数集 $\mathbb{N}$ 一一对应（$1^n \leftrightarrow n$），因此它的子集与 $\mathbb{N}$ 的子集一一对应。而 $\mathbb{N}$ 的子集有 $2^{\aleph_0}$ 个，这是不可数无穷的（康托尔定理）。
+    
+        \item \textbf{存在不可判定的子集：}
+        如果 $\{1\}^*$ 的每个子集都是可判定的，那么 $\{1\}^*$ 的子集总数将不超过可判定语言的总数，即可数无穷。但事实上 $\{1\}^*$ 的子集有不可数无穷多个，因此必然存在 $\{1\}^*$ 的子集是不可判定的。
+    
+        \item \textbf{构造性证明（可选）：}
+        虽然存在性证明已足够，但也可以显式构造一个不可判定的 $\{1\}^*$ 的子集。例如，取一个已知的不可判定语言 $B \subseteq \{0,1\}^*$（如 $A_{\text{TM}}$ 的编码集），然后通过一一映射 $\{0,1\}^* \to \{1\}^*$ 将 $B$ 映射到 $\{1\}^*$ 的一个子集。具体地，定义双射 $\varphi: \{0,1\}^* \to \{1\}^*$ 如下：
+        \[
+        \varphi(x) = 1^{\mathrm{num}(x)},
+        \]
+        其中 $\mathrm{num}(x)$ 是将 $x$ 视为二进制数（去掉前导零）对应的自然数。然后定义
+        \[
+        A = \{ \varphi(x) \mid x \in B \}.
+        \]
+        由于 $B$ 不可判定，且 $\varphi$ 是可计算的双射，则 $A$ 也是不可判定的（因为若有 $A$ 的判定器，则可通过 $\varphi^{-1}$ 得到 $B$ 的判定器）。
+    \end{enumerate}
+\end{solution}
+
+\question P170, 6.3题，证明：如果$A\leq_T B $且 $B\leq_T C$，则 $ A\leq_T C$
+\begin{solution}
+	由 $A \leq_T B$ 知，存在谕示图灵机 $M_1^B$ 判定 $A$。  
+由 $B \leq_T C$ 知，存在谕示图灵机 $M_2^C$ 判定 $B$。
+
+我们需要构造一台谕示图灵机 $M^C$ 判定 $A$。构造思路如下：
+
+$M^C$ 模拟 $M_1^B$ 的运行。每当 $M_1^B$ 查询谕示 $B$ 关于某个字符串 $q$ 是否属于 $B$ 时，$M^C$ 就调用 $M_2^C$（作为子程序）来判定 $q \in B$ 与否。由于 $M_2^C$ 可以判定 $B$，因此 $M^C$ 可以模拟 $M_1^B$ 对谕示 $B$ 的所有查询。
+
+\noindent \textbf{具体构造：}
+\begin{enumerate}
+    \item 在输入 $x$ 上启动 $M_1$（即 $M_1^B$ 的不带谕示的普通图灵机部分）。
+    \item 每当 $M_1$ 进入查询状态，准备询问字符串 $q$ 是否属于 $B$ 时：
+        \begin{enumerate}
+            \item 暂停 $M_1$ 的模拟。
+            \item 以 $q$ 作为输入，运行 $M_2^C$（即 $M_2^C$ 的谕示版本，其谕示为 $C$）。
+            \item 由于 $M_2^C$ 可以判定 $B$，它会在有限步内停机并给出“是”或“否”的答案。
+            \item 将这个答案作为 $M_1$ 的谕示回答，恢复对 $M_1$ 的模拟。
+        \end{enumerate}
+    \item 继续模拟直到 $M_1$ 停机并输出结果。由于 $M_1^B$ 判定 $A$，这个输出就是 $x \in A$ 的正确判定。
+\end{enumerate}
+
+\noindent \textbf{正确性分析：}
+\begin{itemize}
+    \item 在 $M^C$ 的模拟中，每次对 $B$ 的查询都被 $M_2^C$ 正确回答（因为 $M_2^C$ 判定 $B$）。
+    \item 因此，$M^C$ 的行为完全等同于 $M_1^B$，从而能够正确判定 $A$。
+    \item $M^C$ 在谕示 $C$ 下总是停机，因为 $M_1^B$ 在谕示 $B$ 下总是停机（由 $A \leq_T B$ 保证），且每次调用 $M_2^C$ 也总是停机（由 $B \leq_T C$ 保证）。
+\end{itemize}
+
+构造出了谕示图灵机 $M^C$ 判定 $A$，即 $A \leq_T C$。
+\end{solution}
+
+\question P170, 6.7题。证明：对于任意的两个语言 $A$ 和 $B$，存在语言 $J$，使得 $A\leq _T J$且  $B\leq _T J$。
+\begin{solution}
+设 $A, B \subseteq \Sigma^*$。定义语言 $J$ 如下：
+\[
+J = \{0x \mid x \in A\} \cup \{1x \mid x \in B\}.
+\]
+这里我们在每个串前添加一个前缀 $0$ 或 $1$ 以区分来源。假设 $0$ 和 $1$ 不是 $\Sigma$ 中的符号（否则需要更谨慎的编码，但原理相同）。
+
+\noindent \textbf{证明 $A \leq_T J$：}  
+构造谕示图灵机 $M_1^J$ 判定 $A$：
+\begin{enumerate}
+    \item 输入 $x$。
+    \item 查询谕示 $J$：“$0x \in J$ 吗？”
+    \item 如果谕示回答“是”，则接受 $x$（即判定 $x \in A$）；否则拒绝 $x$。
+\end{enumerate}
+因为 $0x \in J \iff x \in A$，所以 $M_1^J$ 正确判定 $A$。因此 $A \leq_T J$。
+
+\noindent \textbf{证明 $B \leq_T J$：}  
+构造谕示图灵机 $M_2^J$ 判定 $B$：
+\begin{enumerate}
+    \item 输入 $x$。
+    \item 查询谕示 $J$：“$1x \in J$ 吗？”
+    \item 如果谕示回答“是”，则接受 $x$；否则拒绝 $x$。
+\end{enumerate}
+因为 $1x \in J \iff x \in B$，所以 $M_2^J$ 正确判定 $B$。因此 $B \leq_T J$。
+\end{solution}
+
+\question P171, 6.11题。证明 $\overline{\text{EQ}}_\text{TM}$可由一个带 $A_\text{TM}$的图灵机识别。
+\begin{solution}
+	\subsection*{证明思路}
+    $L(M_1) \neq L(M_2)$ 当且仅当存在某个字符串 $x$ 使得 $x$ 属于 $L(M_1)$ 但不属于 $L(M_2)$，或者属于 $L(M_2)$ 但不属于 $L(M_1)$。即：
+    \[
+    L(M_1) \neq L(M_2) \iff \exists x \big[ (x \in L(M_1) \land x \notin L(M_2)) \lor (x \notin L(M_1) \land x \in L(M_2)) \big].
+    \]
+    由于 $A_{\text{TM}}$ 可以判定“$M$ 是否接受 $x$”，我们可以利用 $A_{\text{TM}}$ 谕示来搜索这样的 $x$。
+    
+    \subsection*{构造识别机}
+    构造谕示图灵机 $M^{A_{\text{TM}}}$ 如下：
+    
+    $M^{A_{\text{TM}}}$ 对输入 $\langle M_1, M_2 \rangle$：
+    \begin{enumerate}
+        \item 枚举所有字符串 $x \in \Sigma^*$（按标准顺序，如短lex序）。
+        \item 对每个枚举的 $x$，执行以下步骤：
+        \begin{enumerate}
+            \item 询问谕示 $A_{\text{TM}}$：$\langle M_1, x \rangle \in A_{\text{TM}}$ 是否成立？（即 $M_1$ 是否接受 $x$？）
+            \item 询问谕示 $A_{\text{TM}}$：$\langle M_2, x \rangle \in A_{\text{TM}}$ 是否成立？（即 $M_2$ 是否接受 $x$？）
+            \item 如果两个回答不同（即一个“是”一个“否”），则立即接受 $\langle M_1, M_2 \rangle$（因为找到了区分两个语言的串）。
+        \end{enumerate}
+        \item 如果对所有 $x$ 都没有找到区分串，则永不接受（即循环）。
+    \end{enumerate}
+    
+    \subsection*{正确性分析}
+    \begin{itemize}
+        \item 如果 $\langle M_1, M_2 \rangle \in \overline{\text{EQ}}_{\text{TM}}$，即 $L(M_1) \neq L(M_2)$，则必然存在某个 $x$ 使得 $x$ 在 $L(M_1)$ 和 $L(M_2)$ 的成员关系不同。由于枚举了所有串，$M^{A_{\text{TM}}}$ 最终会枚举到这个 $x$，并发现两个谕示回答不同，从而接受输入。
+        \item 如果 $\langle M_1, M_2 \rangle \notin \overline{\text{EQ}}_{\text{TM}}$，即 $L(M_1) = L(M_2)$，则对所有 $x$，两个谕示的回答总是相同，因此 $M^{A_{\text{TM}}}$ 永远不会接受，即它在输入上永不停机。
+    \end{itemize}
+    因此，$M^{A_{\text{TM}}}$ 识别了 $\overline{\text{EQ}}_{\text{TM}}$。
+\end{solution}
+
+
+ 
+\end{questions}
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
