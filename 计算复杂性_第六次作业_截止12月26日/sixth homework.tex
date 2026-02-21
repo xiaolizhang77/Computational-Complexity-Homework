@@ -1,0 +1,455 @@
+%% HOW TO USE THIS TEMPLATE:
+ 
+
+
+%请使用xelatex编译
+\documentclass[11pt,addpoints,answers]{exam}
+
+
+% required macros -- get header.tex file from course web page
+\input{header}
+
+% VARIABLES
+
+\newcommand{\hwnum}{6}
+\newcommand{\duedate}{12月26日晚23:59前} % changing this does not change the
+                                % actual due date :)
+\newcommand{\studentname}{}
+
+% END OF SUPPLIED VARIABLES
+
+\hwheader                       % execute homework commands
+
+\begin{document}
+
+\pagestyle{head}                % put header on  
+
+\pagestyle{head}                % put header on  
+
+\begin{itemize}
+	\item 请将PDF文件发送至邮箱：complexity\_buaa@163.com
+	\item 文件命名规则是``学号-姓名-第五次作业.pdf"
+	\item 务必独立自主解题
+	\item 作业截止时间为 \textbf{\duedate}.
+\end{itemize}
+
+\medskip
+
+
+ 
+
+% QUESTIONS START HERE.  PROVIDE SOLUTIONS WITHIN THE "solution"
+% ENVIRONMENTS FOLLOWING EACH QUESTION.
+
+\begin{questions}
+
+
+\question P202, 7.1题 下列各项是真是假？
+\begin{parts} 
+	\part $2n=O(n)$
+	\part $n^2=O(n)$
+	\part $n^2=O(n\log n)$
+	\part $n\log n=O(n^2)$
+	\part $3^n=2^{O(n)}$
+	\part $2^{2^n}=O(2^{2^n})$
+\end{parts}
+
+\begin{solution}
+	真：(a) (d) (e)
+    
+    假：(b) (c) (f)
+\end{solution}
+
+
+
+\question P202, 7.2题 下列各项是真是假？ 
+ \begin{parts} 
+ 	\part $n=o(2n)$
+ 	\part $2n=o(n^2)$
+ 	\part $2n=o(3^n)$
+ 	\part $1=o(n)$
+ 	\part $n=o(\log n)$
+ 	\part $1=o(1/n)$
+ \end{parts}
+ 
+\begin{solution}
+	真：(a) 
+    
+    假：(b) (c) (d) (e) (f)
+\end{solution}
+
+
+\question P203, 7.6题。
+证明 P在并、连接和补运算下封闭。
+\begin{solution}
+	
+    设 $L_1, L_2 \in \mathbf{P}$，存在确定性图灵机 $M_1$ 在 $O(n^{k_1})$ 时间内判定 $L_1$，$M_2$ 在 $O(n^{k_2})$ 时间内判定 $L_2$。
+    \section*{1. 并运算下的封闭性}
+    \textbf{命题：} 若 $L_1, L_2 \in \mathbf{P}$，则 $L_1 \cup L_2 \in \mathbf{P}$。
+    
+    \textbf{构造：} 构造图灵机 $M$ 如下：
+    \begin{enumerate}
+        \item 输入 $w$，$|w|=n$。
+        \item 模拟 $M_1(w)$，若接受则 $M$ 接受。
+        \item 否则模拟 $M_2(w)$，若接受则 $M$ 接受，否则拒绝。
+    \end{enumerate}
+    \textbf{时间复杂度：} $O(n^{k_1}) + O(n^{k_2}) = O(n^{\max(k_1,k_2)})$，多项式时间。
+    
+    \textbf{结论：} $L_1 \cup L_2 \in \mathbf{P}$。
+    \section*{2. 连接运算下的封闭性}
+    \textbf{命题：} 若 $L_1, L_2 \in \mathbf{P}$，则 $L_1 \circ L_2 = \{ xy \mid x \in L_1, y \in L_2 \} \in \mathbf{P}$。
+    
+    \textbf{构造：} 构造图灵机 $M$ 如下：
+    \begin{enumerate}
+        \item 输入 $w$，$|w|=n$。
+        \item 对于每个 $i = 0,1,\dots,n$，将 $w$ 划分为 $x = w[1..i]$，$y = w[i+1..n]$。
+        \item 用 $M_1$ 检查 $x \in L_1$，用 $M_2$ 检查 $y \in L_2$。
+        \item 若存在某个 $i$ 使两者皆接受，则 $M$ 接受；否则拒绝。
+    \end{enumerate}
+    \textbf{时间复杂度：} 至多 $n+1$ 种划分，每种划分检查时间为 $O(n^{k_1} + n^{k_2})$，总时间 $O(n \cdot n^{\max(k_1,k_2)}) = O(n^{\max(k_1,k_2)+1})$，多项式时间。
+    
+    \textbf{结论：} $L_1 \circ L_2 \in \mathbf{P}$。
+    \section*{3. 补运算下的封闭性}
+    \textbf{命题：} 若 $L \in \mathbf{P}$，则 $\overline{L} \in \mathbf{P}$。
+    
+    \textbf{构造：} 设 $M$ 在 $O(n^k)$ 时间内判定 $L$，构造 $M'$：
+    \begin{enumerate}
+        \item 输入 $w$。
+        \item 模拟 $M(w)$。
+        \item 若 $M$ 接受，则 $M'$ 拒绝；若 $M$ 拒绝，则 $M'$ 接受。
+    \end{enumerate}
+    \textbf{时间复杂度：} 与 $M$ 相同，多项式时间。
+    
+    \textbf{结论：} $\overline{L} \in \mathbf{P}$。
+    \section*{总结}
+    $\mathbf{P}$ 类在并、连接和补运算下封闭。
+\end{solution}
+
+\question P203, 7.7题。
+证明 NP在并和连接运算下封闭。
+\begin{solution}
+    
+    \section*{1. 并运算下的封闭性}
+    
+    \textbf{命题：} 若 $L_1, L_2 \in \mathbf{NP}$，则 $L_1 \cup L_2 \in \mathbf{NP}$。
+    
+    \subsection*{证明构造}
+    设 $L_1$ 的验证器为 $V_1$，多项式时间界 $p_1(n)$；$L_2$ 的验证器为 $V_2$，多项式时间界 $p_2(n)$。  
+    构造验证器 $V$ 如下：
+    
+    \noindent 输入 $(w, c)$：
+    \begin{enumerate}
+        \item 解析 $c$ 为 $(b, c')$，其中 $b \in \{0,1\}$ 指示选择哪个语言，$c'$ 为对应证书。
+        \item 若 $b = 0$，运行 $V_1(w, c')$；若 $b = 1$，运行 $V_2(w, c')$。
+        \item 若相应的验证器接受，则 $V$ 接受；否则 $V$ 拒绝。
+    \end{enumerate}
+    
+    \subsection*{复杂度与正确性分析}
+    \begin{itemize}
+        \item \textbf{证书长度：} $|c| = 1 + \max(p_1(|w|), p_2(|w|))$，多项式长度。
+        \item \textbf{运行时间：} 模拟 $V_1$ 或 $V_2$ 一次，多项式时间。
+        \item \textbf{正确性：}
+            \begin{itemize}
+                \item 若 $w \in L_1 \cup L_2$，则 $w$ 至少属于 $L_1$ 或 $L_2$。不妨设 $w \in L_1$，则存在证书 $c_1$ 使 $V_1(w,c_1)$ 接受。令 $c = (0, c_1)$，$V$ 接受。
+                \item 若 $w \notin L_1 \cup L_2$，则 $w$ 既不在 $L_1$ 也不在 $L_2$，故对任意 $b$ 和 $c'$，相应的 $V_1$ 或 $V_2$ 都拒绝，因此 $V$ 拒绝。
+            \end{itemize}
+    \end{itemize}
+    
+    因此 $L_1 \cup L_2 \in \mathbf{NP}$。
+    
+    \section*{2. 连接运算下的封闭性}
+    
+    \textbf{命题：} 若 $L_1, L_2 \in \mathbf{NP}$，则 $L_1 \circ L_2 = \{ xy \mid x \in L_1, y \in L_2 \} \in \mathbf{NP}$。
+    
+    \subsection*{证明构造}
+    设 $V_1, p_1$ 与 $V_2, p_2$ 如上。构造验证器 $V$ 如下：
+    
+    \noindent 输入 $(w, c)$：
+    \begin{enumerate}
+        \item 解析 $c$ 为 $(i, c_1, c_2)$，其中 $i$ 为划分点（$0 \le i \le |w|$），$c_1$ 是 $x$ 在 $L_1$ 中的证书，$c_2$ 是 $y$ 在 $L_2$ 中的证书。
+        \item 令 $x = w[1..i]$, $y = w[i+1..|w|]$。
+        \item 运行 $V_1(x, c_1)$ 与 $V_2(y, c_2)$。
+        \item 若两者都接受，则 $V$ 接受；否则拒绝。
+    \end{enumerate}
+    
+    \subsection*{复杂度与正确性分析}
+    \begin{itemize}
+        \item \textbf{证书长度：} $i$ 用 $O(\log |w|)$ 位表示，$|c_1| \le p_1(|x|) \le p_1(|w|)$，$|c_2| \le p_2(|y|) \le p_2(|w|)$，总长度为多项式。
+        \item \textbf{运行时间：} 运行 $V_1$ 与 $V_2$ 各一次，均为多项式时间。
+        \item \textbf{正确性：}
+            \begin{itemize}
+                \item 若 $w \in L_1 \circ L_2$，则存在划分 $w = xy$ 使 $x \in L_1, y \in L_2$，因此存在证书 $c_1, c_2$ 使 $V_1(x,c_1)$ 与 $V_2(y,c_2)$ 接受。取 $c = (|x|, c_1, c_2)$，则 $V$ 接受。
+                \item 若 $w \notin L_1 \circ L_2$，则对所有划分，至少一部分不属于对应语言，故对任意证书，$V_1$ 或 $V_2$ 必有一个拒绝，从而 $V$ 拒绝。
+            \end{itemize}
+    \end{itemize}
+    
+    因此 $L_1 \circ L_2 \in \mathbf{NP}$。
+    
+    \section*{结论}
+    NP类在并运算和连接运算下封闭。
+\end{solution}
+
+\question P203, 7.14题。
+证明 P在同态下封闭当且仅当 P=NP。
+\begin{solution}
+
+    \begin{itemize}
+        \item \textbf{字母表}：$\Sigma$, $\Delta$ 为有限字母表。
+        \item \textbf{同态映射}：$h: \Sigma \to \Delta^*$ 将每个字母映射到一个字符串，并自然扩充为 $h: \Sigma^* \to \Delta^*$：
+            \[
+            h(\epsilon) = \epsilon, \quad h(a_1 a_2 \dots a_n) = h(a_1) h(a_2) \dots h(a_n).
+            \]
+        \item \textbf{同态下的像}：对语言 $L \subseteq \Sigma^*$，
+            \[
+            h(L) = \{ h(w) \mid w \in L \} \subseteq \Delta^*.
+            \]
+        \item $\mathbf{P}$ 在同态下封闭：若 $L \in \mathbf{P}$，则 $h(L) \in \mathbf{P}$。
+    \end{itemize}
+    
+    \section*{证明}
+    
+    \subsection*{1. ($\Rightarrow$) 假设 $\mathbf{P}$ 在同态下封闭，证明 $\mathbf{P} = \mathbf{NP}$。}
+    
+    取一个 $\mathbf{NP}$-完全语言 $A$，例如 $\mathrm{SAT}$。  
+    构造语言 $B$ 如下：
+    
+    \[
+    B = \{ x \#^{1^{p(|x|)}} \mid x \in A \},
+    \]
+    其中 $p$ 为某个多项式，$\#$ 为新符号，$1^{p(|x|)}$ 表示 $p(|x|)$ 个 $\#$（这里仅为符号表示，实际实现时 $\#$ 重复 $p(|x|)$ 次）。
+    
+    改用以下构造，使 $B$ 属于 $\mathbf{P}$：
+    
+    设 $V$ 是 $A$ 的多项式时间验证器，$q(n)$ 是其证书长度上界。  
+    定义字母表 $\Gamma = \Sigma \cup \Sigma' \cup \{\#\}$，其中 $\Sigma'$ 是 $\Sigma$ 的一个不相交副本。  
+    令
+    \[
+    B = \{ x \# y \mid x \in \Sigma^*, y \in (\Sigma')^*, |y| = q(|x|), V(x, y) = 1 \}.
+    \]
+    这里 $y$ 是证书的编码（用 $\Sigma'$ 中的符号）。
+    
+    显然 $B \in \mathbf{P}$，因为可以在多项式时间内检查 $|y| = q(|x|)$ 并运行 $V(x,y)$。
+    
+    定义同态 $h: \Gamma^* \to \Sigma^*$：
+    \[
+    h(a) = a \ (a \in \Sigma), \quad h(a') = \epsilon \ (a' \in \Sigma'), \quad h(\#) = \epsilon.
+    \]
+    则
+    \[
+    h(B) = \{ x \mid \exists y \in (\Sigma')^*, |y| = q(|x|), V(x,y)=1 \} = A.
+    \]
+    
+    由于 $B \in \mathbf{P}$ 且 $\mathbf{P}$ 在同态下封闭，则 $A = h(B) \in \mathbf{P}$。  
+    因为 $A$ 是 $\mathbf{NP}$-完全的，所以 $\mathbf{NP} \subseteq \mathbf{P}$，又已知 $\mathbf{P} \subseteq \mathbf{NP}$，故 $\mathbf{P} = \mathbf{NP}$。
+    
+    \subsection*{2. ($\Leftarrow$) 假设 $\mathbf{P} = \mathbf{NP}$，证明 $\mathbf{P}$ 在同态下封闭。}
+    
+    设 $L \in \mathbf{P}$，$h$ 为一同态映射。要证 $h(L) \in \mathbf{P}$。
+    
+    考虑 $h(L)$ 的判定问题：输入 $y \in \Delta^*$，问是否存在 $x \in \Sigma^*$ 使得 $h(x)=y$ 且 $x \in L$。
+    
+    这是一个 $\mathbf{NP}$ 问题：
+    \begin{itemize}
+        \item 非确定性地猜测 $x$（长度不超过某个多项式，因为 $h$ 是线性的，若 $h$ 不是字母到单个字母的映射，$x$ 可能比 $y$ 短，但最大长度是 $|y| \cdot \max_{a \in \Sigma} |h(a)|$）。
+        \item 验证 $h(x)=y$（线性时间）。
+        \item 验证 $x \in L$（多项式时间，因 $L \in \mathbf{P}$）。
+    \end{itemize}
+    因此 $h(L) \in \mathbf{NP}$。
+    
+    由假设 $\mathbf{P} = \mathbf{NP}$，得 $h(L) \in \mathbf{P}$。
+    
+    故 $\mathbf{P}$ 在同态下封闭。
+
+\end{solution}
+
+
+
+\question P203, 7.15题。
+设 $A\subseteq 1^*$是任意一元语言。证明：若A是 NP完全的，那么 P=NP。
+\begin{solution}
+
+	设 $A \subseteq 1^*$ 是一元语言，并且 $A$ 是 NP完全的。  
+
+    记 $A = \{ 1^n \mid n \in S \}$，其中 $S \subseteq \mathbb{N}$。  
+    由于 $A$ 是 NP完全的，特别地 $\text{SAT} \le_p A$，即存在多项式时间可计算函数 $f$，使得对任意布尔公式 $\phi$，
+    \[
+    \phi \in \text{SAT} \iff f(\phi) = 1^{m_\phi} \in A,
+    \]
+    并且存在多项式 $q$，使得 $m_\phi \le 2^{q(|\phi|)}$，因此 $m_\phi$ 的二进制长度 $\ell_\phi \le q(|\phi|)$。
+    
+    考虑判定 $\phi \in \text{SAT}$ 的过程：我们只需判断 $1^{m_\phi} \in A$。  
+    由于 $A \in \text{NP}$，存在非确定图灵机 $M_A$ 在输入 $1^n$ 上在时间 $p(n)$ 内判定 $A$（$p$ 为多项式）。  
+    
+    我们构造一个判定 SAT 的多项式时间算法如下：  
+    输入 $\phi$，计算 $m_\phi$（以二进制表示）。  
+    为了判断 $1^{m_\phi} \in A$，不必显式写出长为 $m_\phi$ 的一元输入，而是**非确定地猜测** $M_A$ 在输入 $1^{m_\phi}$ 上的整个计算路径（即每一步的非确定选择），并在多项式时间内验证该路径是否为接受路径。
+    
+    当模拟 $M_A$ 的一步需要知道输入第 $i$ 位的符号时，由于 $i \le m_\phi$ 时该符号总是“1”，我们只需比较 $i$ 与 $m_\phi$（两者二进制长度均为 $O(\ell_\phi) = O(q(|\phi|))$），这可在多项式时间内完成。  
+    因此，即使 $M_A$ 的运行时间 $p(m_\phi)$ 是 $|\phi|$ 的指数，我们仍然可以在 $|\phi|$ 的多项式时间内非确定地完成对其计算的模拟。  
+    
+    于是 SAT 可在多项式时间内被非确定图灵机判定，即 $\text{SAT} \in \text{P}$，从而 $\text{P} = \text{NP}$。
+\end{solution}
+
+
+\question P204, 7.20题。
+令 $f:N\rightarrow N$为任意 $f(n)=o(n\log n)$的函数。证明 TIME(f(n))中只含有正则语言。
+\begin{solution}
+
+	设 \(M\) 是一台单带确定性图灵机，在时间 \(T(n) = o(n\log n)\) 内判定语言 \(L\)。  
+    记 \(M\) 的状态集为 \(Q\)，带字母表为 \(\Gamma\)。
+    
+    \medskip
+    
+    \noindent
+    \textbf{交叉序列定义：}  
+    将输入写在初始带上，考虑任意两个相邻格子之间的边界。  
+    当 \(M\) 运行过程中读写头穿过该边界时，记录当前状态以及穿行方向，按时间顺序得到的序列称为该边界的\textbf{交叉序列}（crossing sequence）。
+    
+    \medskip
+    
+    \noindent
+    \textbf{关键引理（Hennie 1965）：}  
+    若对某个无限族长度递增的输入，存在一个边界处的交叉序列长度随输入长度趋于无穷，则 \(T(n) = \Omega(n\log n)\)。
+    
+    \noindent
+    \textbf{简要论证：}  
+    若某边界处的交叉序列长度至少为 \(k\)，则该边界传递了 \(\Omega(k)\) 比特信息。  
+    如果 \(L\) 非正则，为区分不同输入，需要在某 \(\Omega(n)\) 个边界处传递 \(\Omega(\log n)\) 比特信息，因此总信息量 \(\Omega(n\log n)\)，从而时间 \(\Omega(n\log n)\)。
+    
+    \medskip
+    
+    \noindent
+    由题设 \(T(n) = o(n\log n)\)，故上述情形不出现。  
+    因此，当输入长度充分大时，存在一种分割使得每个边界处的交叉序列长度均有常数上界 \(B\)（仅依赖于 \(|Q|\) 和 \(|\Gamma|\)）。  
+    
+    由于交叉序列的可能种类有限（最多 \((2|Q|)^{B+1}\) 种），我们可以构造一个有限自动机模拟 \(M\) 的计算：  
+    - 状态记录当前模拟到的边界左侧的交叉序列以及有限长度的右侧输入前缀；  
+    - 利用有限种类的交叉序列在边界间传递信息。  
+    
+    因此 \(L\) 可由有限自动机识别，即 \(L\) 是正则语言。
+    
+    \medskip
+    
+    \noindent
+    综上，\(\mathrm{TIME}(f(n))\) 在 \(f(n) = o(n\log n)\) 时只包含正则语言。
+\end{solution}
+
+\question P205, 7.35题。
+证明: 若P=NP，则任给布尔公式 $\phi$，若$\phi$是可满足的，则存在多项式时间算法给出一个$\phi$的满足赋值。
+\begin{solution}
+
+	假设 $\mathbf{P} = \mathbf{NP}$，则 SAT 问题可在多项式时间内判定。即存在算法 $\mathcal{A}$，对于任意布尔公式 $\psi$，$\mathcal{A}(\psi)$ 在多项式时间内输出 $\psi$ 是否可满足。
+
+    设 $\phi(x_1, x_2, \dots, x_n)$ 是可满足的布尔公式，其长度为 $m$，满足 $n \le m$。我们通过以下自归约过程构造满足赋值：
+    
+    \begin{enumerate}
+        \item 初始化 $\psi_0 \gets \phi$。
+        \item 对 $i = 1$ 到 $n$ 依次确定 $x_i$ 的值：
+        \begin{enumerate}
+            \item 将 $\psi_{i-1}$ 中的 $x_i$ 替换为 0，得到公式 $\psi_{i-1}[x_i \gets 0]$
+            \item 调用 $\mathcal{A}$ 判断 $\psi_{i-1}[x_i \gets 0]$ 是否可满足。
+            \item 若可满足，则令 $x_i = 0$，并令 $\psi_i \gets \psi_{i-1}[x_i \gets 0]$。
+            \item 若不可满足，则因 $\psi_{i-1}$ 可满足（归纳保持），必有 $x_i = 1$ 时可满足。令 $x_i = 1$，并令 $\psi_i \gets \psi_{i-1}[x_i \gets 1]$。
+        \end{enumerate}
+        \item 最终得到赋值 $\mathbf{a} = (x_1, x_2, \dots, x_n)$，由构造过程可知 $\phi(\mathbf{a}) = \text{True}$。
+    \end{enumerate}
+    
+    \noindent\textbf{时间复杂度分析：}
+    \begin{itemize}
+        \item 循环 $n \le m$ 次。
+        \item 每次构造新公式需要 $O(m)$ 时间。
+        \item 每次调用 $\mathcal{A}$ 需要 $O(p(m))$ 时间（$p$ 为多项式）。
+        \item 总时间为 $O(m \cdot p(m))$，仍为多项式时间。
+    \end{itemize}
+    
+    因此，在 $\mathbf{P} = \mathbf{NP}$ 的假设下，存在多项式时间算法为可满足的布尔公式输出一个具体的满足赋值。
+\end{solution}
+
+
+\question P205, 7.36题。
+证明: 若P=NP，则可以在多项式时间内将整数因子分解。
+\begin{solution}
+	
+    设 $N$ 为待分解的正整数（若 $N$ 为素数，可以在多项式时间内判定，故仅需考虑 $N$ 为合数的情况）。记 $n = \lceil \log_2 N \rceil$ 为 $N$ 的二进制长度。
+
+    \textbf{主要思路：} 若 $\mathbf{P} = \mathbf{NP}$，则存在多项式时间算法求解 \textsc{Circuit-SAT} 问题。我们可以将“寻找 $N$ 的一个非平凡因子”表达为一个可满足性判定问题，具体步骤如下：
+    
+    \begin{enumerate}
+        \item \textbf{构造电路：} 我们尝试寻找 $N$ 的一个因子 $d$，其中 $2 \leq d \leq \sqrt{N}$。对每个可能因子长度 $k = 2, 3, \dots, \lceil n/2 \rceil$，构造一个布尔电路 $C_k$，其输入为 $k$ 个布尔变量 $x_1, x_2, \dots, x_k$（表示 $d$ 的二进制展开 $d = \sum_{i=1}^k x_i 2^{i-1}$），以及 $n-k$ 个布尔变量 $y_1, \dots, y_{n-k}$（表示商 $q = N/d$ 的二进制展开）。电路 $C_k$ 检查以下条件：
+        \begin{enumerate}
+            \item $d \times q = N$（使用二进制乘法器电路）；
+            \item $d > 1$ 且 $q > 1$（确保 $d$ 是非平凡因子）。
+        \end{enumerate}
+        若存在 $d, q$ 满足条件，则 $C_k$ 可满足。
+        
+        \item \textbf{可满足性判定：} 在 $\mathbf{P} = \mathbf{NP}$ 的假设下，\textsc{Circuit-SAT} 属于 $\mathbf{P}$。因此存在多项式时间算法 $\mathcal{A}$ 判定 $C_k$ 是否可满足。对 $k=2$ 到 $\lceil n/2 \rceil$ 依次使用 $\mathcal{A}$ 检查，直到找到第一个可满足的 $C_k$。
+        
+        \item \textbf{构造满足赋值：} 类似于习题7.35，若 $\mathbf{P} = \mathbf{NP}$，则不仅能判定可满足性，还能在多项式时间内求出具体赋值。对于可满足的 $C_k$，我们可以得到 $x_1,\dots,x_k$ 的赋值，从而得到 $d$ 的具体值。
+        
+        \item \textbf{递归分解：} 得到 $N = d \times q$ 后，对 $d$ 和 $q$ 分别递归应用上述过程。由于每次递归至少将 $N$ 分成两个 $\geq 2$ 的因子，递归深度不超过 $O(n)$。
+    \end{enumerate}
+    
+    \textbf{时间复杂度分析：}
+    \begin{itemize}
+        \item 电路 $C_k$ 的规模为 $O(n^2)$（因为二进制乘法器可用 $O(n^2)$ 个门实现）；
+        \item 最多需要检查 $O(n)$ 个不同的 $k$；
+        \item 每次电路可满足性判定和求赋值的时间为 $O(p(n))$，其中 $p$ 为多项式；
+        \item 递归深度 $O(n)$，每次递归时间多项式，总时间仍为多项式。
+    \end{itemize}
+    
+    因此，若 $\mathbf{P} = \mathbf{NP}$，则存在关于 $n = \log N$ 的多项式时间算法分解任意整数 $N$。
+\end{solution}
+
+\question P205, 7.37题。
+证明: 若P=NP，则可以在多项式时间内找出无向图中的最大团。
+\begin{solution}
+
+	设 $G = (V, E)$ 是一个无向图，$|V| = n$。
+
+     最大团问题是 NP-hard 问题。若 $\mathbf{P} = \mathbf{NP}$，则我们不仅能判定是否存在大小为 $k$ 的团，还能构造出这样的团。我们可以通过二分搜索确定最大团的大小，然后构造出该最大团。
+    
+    具体算法如下：
+    
+    \begin{enumerate}
+        \item \textbf{确定最大团大小 $k_{\max}$}： \\
+        使用二分搜索。因为团的大小在 $1$ 到 $n$ 之间。对于每个猜测的 $k$，检查图 $G$ 中是否存在大小为 $k$ 的团。\\
+        
+        检查方法：构造布尔公式 $\phi_k$，其变量为 $x_1, \dots, x_n$，$x_i = 1$ 表示顶点 $i$ 被选中。公式包含两部分：
+        \begin{itemize}
+            \item 恰好选中 $k$ 个顶点：$\sum_{i=1}^n x_i = k$。这可以用组合电路表示，再转化为 CNF（存在多项式规模的转换）。
+            \item 选中的顶点两两之间有边：对于每对 $i<j$，若 $(i,j) \notin E$，则加入子句 $(\neg x_i \vee \neg x_j)$。
+        \end{itemize}
+        于是 $\phi_k$ 可满足当且仅当 $G$ 中存在大小为 $k$ 的团。
+        
+        因为假设 $\mathbf{P} = \mathbf{NP}$，SAT 问题可在多项式时间内判定，所以可以在 $O(\log n)$ 次 SAT 判定内找到 $k_{\max}$，总时间多项式。
+    
+        \item \textbf{构造大小为 $k_{\max}$ 的团}：\\
+        利用习题 7.35 的结论：若 $\mathbf{P} = \mathbf{NP}$，则对可满足的公式可以在多项式时间内求出具体赋值。
+        
+        对公式 $\phi_{k_{\max}}$ 应用该算法，得到一组赋值 $(x_1, \dots, x_n)$，其中 $x_i = 1$ 的顶点构成的集合 $C \subseteq V$ 就是一个大小为 $k_{\max}$ 的团。
+        
+        \item \textbf{验证}：\\
+        由构造可知 $|C| = k_{\max}$，且 $C$ 中任意两点在 $G$ 中均有边，所以 $C$ 是最大团。
+    \end{enumerate}
+    
+    \textbf{时间复杂度分析：}
+    \begin{itemize}
+        \item 第一步二分搜索需 $O(\log n)$ 次 SAT 判定。
+        \item 第二步需一次求 SAT 赋值。
+        \item 每步 SAT 判定和赋值求解在 $\mathbf{P} = \mathbf{NP}$ 下均为多项式时间。
+        \item 总时间为多项式。
+    \end{itemize}
+    
+    因此，若 $\mathbf{P} = \mathbf{NP}$，则存在多项式时间算法求解无向图的最大团问题（包括求最大团的大小和具体顶点集）。
+    
+\end{solution}
+
+
+ 
+\end{questions}
+\end{document}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
